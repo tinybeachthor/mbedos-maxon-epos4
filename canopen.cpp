@@ -108,7 +108,9 @@ namespace epos4 {
 
   void initialize ( pins... ) {
     // Setup CAN
+  }
 
+  void startUp () {
     // Wait for SwitchOnDisabled - Statusword
     // Send <<Shutdown>>         - Controlword
     // Wait for ReadyToSwitchOn
@@ -117,7 +119,7 @@ namespace epos4 {
     // Send <<EnableOperation>>
     // Wait for OperationEnabled
 
-    // Setup units
+    // Setup units ?
   }
 
   void quickStop () {

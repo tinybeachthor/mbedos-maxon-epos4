@@ -21,7 +21,8 @@
   SFO - Special Function Objects
     SYNC - Synchronization Objects
     EMCY - Emergency Objects
-  NMO - Network Management Objects - Services for network init, error control, device status control
+  NMO - Network Management Objects - Services for network init, error control,
+                                     device status control
 
   PDO
     Non confirmed.
@@ -32,10 +33,13 @@
     Read PDO - CAN Remote Frame, which will be responbed by the corresponding CAN Data frame
 
     Read PDO - optional
-    Number and length of device PDOs are application-specific, must be specified in the device profile.
+    Number and length of device PDOs are application-specific,
+    must be specified in the device profile.
 
     Number of supported PDOs at the Object Dictionary @ 0x1004h.
-    PDO mapping + data types are determined by defaults set at 0x1600h (for the first R_PDO) nad 0x1A00h (for the first T_PDO). Up to 512 T_PDOs and 512 R_PDOs may be used in a CANOpen network.
+    PDO mapping + data types are determined by defaults set at 0x1600h (for the first R_PDO)
+    ans 0x1A00h (for the first T_PDO).
+    Up to 512 T_PDOs and 512 R_PDOs may be used in a CANOpen network.
 
   Communication profiles:
     - Event-driven - producer driven
