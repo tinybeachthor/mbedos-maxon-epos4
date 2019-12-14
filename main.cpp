@@ -1,16 +1,21 @@
 #include "mbed.h"
 #include <inttypes.h>
 
-// Blinking rate in milliseconds
+#include "debug.hpp"
+
 #define BLINKING_RATE_MS 500
 
-Serial pc(SERIAL_TX, SERIAL_RX);
-
 int main() {
-  // Initialise the digital leds
   DigitalOut led_power(LED1);
   DigitalOut led_status(LED2);
   DigitalOut led_error(LED3);
+
+  pc.printf("Starting up...")
+
+  rtospp::Process loom_rx_can(&can::loom::loom_receive_main, "loom can rx process");
+  rtospp::Process loom_tx_can(&can::loom::loom_transmit_main, "loom can tx process");
+
+  pc.printf("Setup complete!")
 
   while (true) {
     led_power = !led_power;
