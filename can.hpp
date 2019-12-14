@@ -4,8 +4,8 @@
 
 namespace can
 {
-  void init (PinName rx, PinName tx, const uint32_t baudrate = 500000);
+  extern void init (PinName rx, PinName tx, uint32_t baudrate);
 
-  bool get (CANMessage& msg, uint32_t millisec = osWaitForever);
-  bool put (const CANMessage& msg);
+  extern bool get (CANMessage& msg, uint32_t timeout);
+  extern bool put (const CANMessage& msg);
 }

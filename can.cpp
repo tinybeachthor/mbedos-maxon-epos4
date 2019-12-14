@@ -3,7 +3,6 @@
 #endif
 
 #include "can.hpp"
-#include "mbed.h"
 
 #include <queue>
 
@@ -22,26 +21,10 @@ class InterruptableCAN : public mbed::CAN {
   void unlock() override {};
 };
 
-enum Priority : uint8_t {
-  NORMAL   = 127,
-  CRITICAL = 255,
-};
-
-struct CANMessagePriority {
-  CANMessage msg;
-  Priority priority;
-
-  bool operator < (const CANMessagePriority& that) const {
-    return (this->priority < that.priority);
-  }
-};
-
 namespace can {
 
   constexpr long unsigned int SIZE = 30;
   rtos::Mail<CANMessage, SIZE> rx_buffer;
-
-  std::priority_queue<CANMessagePriority> tx_queue;
 
   InterruptableCAN* _bus;
 
@@ -51,20 +34,26 @@ namespace can {
   uint32_t rx_put_fail_count = 0;
   uint32_t rx_buffer_full_count = 0;
 
-  bool get (CANMessage& msg, uint32_t millisec = osWaitForever) {
-    osEvent evt = rx_buffer.get(millisec);
+  bool get (CANMessage& msg, uint32_t timeout = osWaitForever) {
+    osEvent evt = rx_buffer.get(timeout);
 
     if (evt.status == osEventMail) {
       CANMessage* received = (CANMessage*)evt.value.p;
       memcpy(&msg, received, sizeof(CANMessage));
+
       if (rx_buffer.free(received)) {
-        can_warn(can::loom::SafetyMessage::Code_E::CAN_RX_FREE_FAIL);
+        pc.printf("CAN_RX_FREE_FAIL");
       }
+
       return true;
     }
     else if (evt.status == osEventTimeout) {
+      pc.printf("CAN_RX_TIMEOUT");
       return false;
     }
+
+    pc.printf("CAN_RX_ERROR");
+    return false;
   }
 
   bool put (const CANMessage& msg) {
@@ -77,32 +66,21 @@ namespace can {
   void read_irq () {
     CANMessage* msg = rx_buffer.alloc();
 
-    // if the buffer is full, drop the newly arrived message so we can keep
-    // running.
+    // if the buffer is full, drop the newly arrived message so we can keep running.
     if (msg == nullptr) {
       CANMessage temp;
       _bus->read(temp);
-      // We don't (always) throw an explicit error because that will just
-      // increase the load on the CAN bus and cause more errors.
-      if (++rx_buffer_full_count % 100 == 99) {
-        can_warn(can::loom::SafetyMessage::Code_E::CAN_RX_POOL_EMPTY);
-      }
       return;
     }
 
     _bus->read(*msg);
+
     if (rx_buffer.put(msg) != osOK) {
-      // We don't (always) throw an explicit error because that will just
-      // increase the load on the CAN bus and cause more errors.
-      if (++rx_put_fail_count % 100 == 99) {
-        can_warn(can::loom::SafetyMessage::Code_E::CAN_RX_QUEUE_PUT_FAIL);
-      }
+      // message was not passed properly
     }
   }
 
   void write_irq () { tx_avail.release(); }
-
-  void err_irq () { _bus->reset(); }
 
   void init (PinName rx, PinName tx, uint32_t baudrate = 500000) {
     _bus = new InterruptableCAN(rx, tx, baudrate),
