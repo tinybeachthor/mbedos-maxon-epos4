@@ -60,6 +60,7 @@ namespace can {
     while (!_bus->write(msg)) {
       tx_avail.wait(1);
     }
+
     return true;
   }
 
@@ -70,6 +71,9 @@ namespace can {
     if (msg == nullptr) {
       CANMessage temp;
       _bus->read(temp);
+
+      led_error = true;
+
       return;
     }
 
@@ -77,6 +81,8 @@ namespace can {
 
     if (rx_buffer.put(msg) != osOK) {
       // message was not passed properly
+
+      led_error = true;
     }
   }
 
@@ -90,4 +96,4 @@ namespace can {
     _bus->attach(&write_irq, CAN::TxIrq);
   }
 
-} /* namespace can */
+}
