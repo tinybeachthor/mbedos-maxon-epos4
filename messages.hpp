@@ -1,8 +1,43 @@
 #pragma once
 
+#include "mbed.h"
 #include <stdint.h>
 
-namespace canopen {
+/*
+Profile Position Modular (PPM)
+
+Inputs:
+  Profile velocity        0x6081
+  Max profile velocity    0x607F
+  Target position         0x607A
+  Software position limit 0x607D
+
+  Controlword             0x6040
+
+  Profile acceleration    0x6083
+  Profile deceleration    0x6084
+  Quick stop deceleration 0x6085
+
+  Motion profile type     0x6086
+
+Outputs:
+  Statusword              0x6041
+
+  EMCY objects for Emergency Telegrams
+*/
+
+namespace messages {
+
+  enum Controlword : uint16_t {
+    Shutdown                   = 0b00000110, // 0xxx x110
+    SwitchOn                   = 0b00000111, // 0xxx x111
+    SwitchOnAndEnableOperation = 0b00001111, // 0xxx 1111
+    DisableVoltage             = 0b00000000, // 0xxx xx0x
+    QuickStop                  = 0b00000010, // 0xxx x01x
+    DisableOperation           = 0b00000111, // 0xxx 0111
+    EnableOperation            = 0b00001111, // 0xxx 1111
+    FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
+  };
 
   enum PPM_Parameters : uint16_t {
 
@@ -78,4 +113,4 @@ namespace canopen {
 		FFC0_WRONG_NMT_STATE              = 0x0F00FFC0, // Device is in wrong NMT state
   };
 
-} // canopen
+}
