@@ -7,8 +7,6 @@
 
 int main() {
   DigitalOut led_power(LED1);
-  DigitalOut led_status(LED2);
-  DigitalOut led_error(LED3);
 
   pc.printf("Starting up...")
 
@@ -19,6 +17,6 @@ int main() {
 
   while (true) {
     led_power = !led_power;
-    wait_us(BLINKING_RATE_MS * 1000);
+    wait_ms(BLINKING_RATE_MS);
   }
 }
