@@ -3,33 +3,19 @@
 #include "can.hpp"
 #include "epos4_messages.hpp"
 
-/*
-Automatically on boot
-Initialization -> Pre-Operational
-
-Pre-operational
-  Can be configured using SDO communication.
-  Emergency objects.
-  NMT Protocol to transition state.
-  No PDO communication.
-
-Operational
-  SDO, PDO, EMCY, NMT
-
-State transition
-  NMT object
-    Identifier 0, 2 bytes
-      | 0 CS | 1 Node-ID |
-      | 0x80 | 0 (all)   | All CANOpen will enter Pre-Operational
-      | 0x82 | 0         | Reset Communication
-      | 0x81 | 0         | Reset Node
-      | 0x01 | 0         | Start - Enter Operational
-      | 0x02 | 0         | Stop  - Enter Stopped
-
-    Node-ID - 0 for all, n for ID
-*/
-
 namespace epos4 {
+
+  // TODO : make this a class
+
+  CANMessage constructCANMessage (const uint8_t* raw) {
+    CANMessage out;
+    out.format = CANStandard; // Standard format - 11bits
+    out.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
+    memcpy(out.data, raw, 8);
+    out.len = 8;
+
+    return out;
+  }
 
   epos4State statuswordToState(uint16_t statusword) {
     uint8_t lowByte = (uint8_t)(statusword & 0xFF);
@@ -57,10 +43,14 @@ namespace epos4 {
   }
 
   epos4State pollState () {
+
+    // TODO : thread listen for messages + transition to states
+    // TODO : sync state reading + block for update here
+
     CANMessage out;
     out.format = CANStandard; // Standard format - 11bits
-    out.id = 0x600 + 0;       // Function code + NODE_ID (0 = broadcast)
-    memcpy(out.data, &epos4_messages::StatuswordData, 4);
+    out.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
+    memcpy(out.data, &epos4_messages::Statusword_Data, 4);
     out.len = 4;
     can::put(out);
 
@@ -87,43 +77,33 @@ namespace epos4 {
   void init (PinName rx, PinName tx) {
     can::init(rx, tx, 500000);
 
-    // NMT -> Operational ? : TODO
+    // TODO : listen for heartbeat -> get NODE_ID
+
+    // NMT -> Operational TODO
   }
 
   void startPosMode () {
     blockForState(SwitchOnDisabled);
 
     // Shutdown (-> ReadyToSwitchOn)
-    can::put(epos4_messages::constructControlword(
-          epos4_messages::Shutdown));
+    can::put(epos4_messages::constructControlword(epos4_messages::Shutdown));
     Thread::wait(50);
     blockForState(ReadyToSwitchOn);
 
-    can::put(epos4_messages::constructControlword(
-          epos4_messages::DisableVoltage));
-    /* foo += can.write(ReSet1()); */
-    Thread::wait(50);
-    can::put(epos4_messages::constructControlword(
-          epos4_messages::DisableVoltage));
-    /* foo += can.write(ReSet2()); */
-    Thread::wait(50);
-
     // Set profile position mode (PPM)
-    can::put(epos4_messages::constructControlword(
-          epos4_messages::DisableVoltage));
-    /* foo += can.write(Pos_Mode()); */
+    can::put(constructCANMessage(&SetPPM_Data));
     Thread::wait(50);
 
-    // Setup units ? : TODO
+    // Setup units ? TODO
+
+    // Setup PDOs ? TODO
 
     // Switch on  (-> SwitchedOn), allow high voltage
-    can::put(epos4_messages::constructControlword(
-          epos4_messages::SwitchedOn));
+    can::put(epos4_messages::constructControlword(epos4_messages::SwitchedOn));
     Thread::wait(50);
     blockForState(SwitchedOn);
     // Enable operation (-> OperationEnabled), allow torque
-    can::put(epos4_messages::constructControlword(
-          epos4_messages::EnableOperation));
+    can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation));
     Thread::wait(50);
     blockForState(OperationEnabled);
   }
@@ -143,6 +123,33 @@ namespace epos4 {
   /* } */
 
   /* namespace NMT { */
+
+    /*
+    Automatically on boot
+    Initialization -> Pre-Operational
+
+    Pre-operational
+      Can be configured using SDO communication.
+      Emergency objects.
+      NMT Protocol to transition state.
+      No PDO communication.
+
+    Operational
+      SDO, PDO, EMCY, NMT
+
+    State transition
+      NMT object
+        Identifier 0, 2 bytes
+          | 0 CS | 1 Node-ID |
+          | 0x80 | 0 (all)   | All CANOpen will enter Pre-Operational
+          | 0x82 | 0         | Reset Communication
+          | 0x81 | 0         | Reset Node
+          | 0x01 | 0         | Start - Enter Operational
+          | 0x02 | 0         | Stop  - Enter Stopped
+
+        Node-ID - 0 for all, n for ID
+    */
+
   /*   enum State { */
   /*     Initialization, */
   /*     PreOperational, */
