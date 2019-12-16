@@ -3,6 +3,8 @@
 #include "can.hpp"
 #include "epos4_messages.hpp"
 
+#include "debug.hpp"
+
 namespace epos4 {
 
   // TODO : make this a class
@@ -91,7 +93,7 @@ namespace epos4 {
     blockForState(ReadyToSwitchOn);
 
     // Set profile position mode (PPM)
-    can::put(constructCANMessage(&SetPPM_Data));
+    can::put(constructCANMessage(epos4_messages::SetPPM_Data));
     ThisThread::sleep_for(50);
 
     // Setup units ? TODO
@@ -99,7 +101,7 @@ namespace epos4 {
     // Setup PDOs ? TODO
 
     // Switch on  (-> SwitchedOn), allow high voltage
-    can::put(epos4_messages::constructControlword(epos4_messages::SwitchedOn));
+    can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn));
     ThisThread::sleep_for(50);
     blockForState(SwitchedOn);
     // Enable operation (-> OperationEnabled), allow torque
