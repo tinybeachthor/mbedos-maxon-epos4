@@ -2,7 +2,7 @@
 
 #include "mbed.h"
 
-Serial pc(SERIAL_TX, SERIAL_RX);
+static Serial pc(SERIAL_TX, SERIAL_RX);
 
-DigitalOut led_status(LED2);
-DigitalOut led_error(LED3);
+static DigitalOut led_status(LED2);
+static DigitalOut led_error(LED3);
