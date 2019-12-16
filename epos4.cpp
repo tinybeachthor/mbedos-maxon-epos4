@@ -73,6 +73,7 @@ namespace epos4 {
   }
 
   void blockForState (epos4State desired) {
+    pc.printf("Waiting for state : %d", desired);
     epos4State state = Unknown;
     do {
       state = pollState();
@@ -91,54 +92,40 @@ namespace epos4 {
 
   void startPosMode () {
     blockForState(SwitchOnDisabled);
+
+    // Shutdown (-> ReadyToSwitchOn)
     can::put(epos4_messages::constructControlword(
-          epos4_messages::SwitchOnAndEnableOperation));
+          epos4_messages::Shutdown));
+    Thread::wait(50);
+    blockForState(ReadyToSwitchOn);
 
-/* const char SwitchOnDisabled_Data[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00}; */
-/* const char ReadyForSwitchOn_Data[8] = {0x2B,0x40,0x60,0x00,0x06,0x00,0x00,0x00}; */
-/* const char SwitchOn_Data[8] = {0x2B,0x40,0x60,0x00,0x07,0x00,0x00,0x00}; */
-/* const char OperationEnable_Data[8] = {0x2B,0x40,0x60,0x00,0x0F,0x00,0x00,0x00}; */
-/* const char ReSet1_Data[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00}; */
-/* const char ReSet2_Data[8] = {0x2B,0x40,0x60,0x00,0x80,0x00,0x00,0x00}; */
-/* const char StatusWord_Data[4] = {0x40,0x41,0x60,0x00}; */
-/* const char Pos_Mode_Data[8] = {0x2F,0x60,0x60,0x00,0xFF,0x00,0x00,0x00}; */
-/* const char Req_Current_Pos_Data[4] = {0x40,0x64,0x60,0x00}; */
-/* const char Homing_Mode_Data[8] = {0x2F,0x60,0x60,0x00,0x06,0x00,0x00,0x00}; */
-/* const char Homing_Method_Data_positive[8] = {0x2F,0x98,0x60,0x00,0xFD,0x00,0x00,0x00}; */
-/* const char Homing_Method_Data_negative[8] = {0x2F,0x98,0x60,0x00,0xFC,0x00,0x00,0x00}; */
-/* const char StartHoming_Data[8] = {0x2B,0x40,0x60,0x00,0x1F,0x00,0x00,0x00}; */
-/* const char Homing_Method_current_pos_Data[8] = {0x2F,0x60,0x60,0x00,0x23,0x00,0x00,0x00}; */
-
-    /* //SwitchOnDisabled */
-    /* int foo=0; */
-    /* foo += can.write(SwitchOnDisabled()); */
-    /* Thread::wait(50); */
-
-    /* //ReSet */
+    can::put(epos4_messages::constructControlword(
+          epos4_messages::DisableVoltage));
     /* foo += can.write(ReSet1()); */
-    /* Thread::wait(50); */
-
-    /* //ReSet */
+    Thread::wait(50);
+    can::put(epos4_messages::constructControlword(
+          epos4_messages::DisableVoltage));
     /* foo += can.write(ReSet2()); */
-    /* Thread::wait(50); */
+    Thread::wait(50);
 
-    /* //ReadyForSwitchOn */
-    /* foo += can.write(ReadyForSwitchOn()); */
-    /* Thread::wait(50); */
-
-    /* //Pos_Mode */
+    // Set profile position mode (PPM)
+    can::put(epos4_messages::constructControlword(
+          epos4_messages::DisableVoltage));
     /* foo += can.write(Pos_Mode()); */
-    /* Thread::wait(50); */
+    Thread::wait(50);
 
-    /* //SwitchOn */
-    /* foo += can.write(SwitchOn()); */
-    /* Thread::wait(50); */
+    // Setup units ? : TODO
 
-    /* //OperationEnable */
-    /* foo += can.write(OperationEnable()); */
-    /* Thread::wait(50); */
-
-    // Setup units ?
+    // Switch on  (-> SwitchedOn), allow high voltage
+    can::put(epos4_messages::constructControlword(
+          epos4_messages::SwitchedOn));
+    Thread::wait(50);
+    blockForState(SwitchedOn);
+    // Enable operation (-> OperationEnabled), allow torque
+    can::put(epos4_messages::constructControlword(
+          epos4_messages::EnableOperation));
+    Thread::wait(50);
+    blockForState(OperationEnabled);
   }
 
   /* void quickStop () { */
