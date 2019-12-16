@@ -18,6 +18,6 @@ namespace epos4 {
   };
 
   extern void init (PinName rx, PinName tx);
-  extern void start ();
+  extern void startPosMode ();
   extern void stop ();
 }

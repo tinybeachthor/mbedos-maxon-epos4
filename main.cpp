@@ -20,7 +20,7 @@ int main() {
   wait_us(1000 * 1000);
 
   pc.printf("Turning motorcontroller on");
-  epos4::start();
+  epos4::startPosMode();
   wait_us(1000 * 1000);
   pc.printf("Motorcontroller on");
 
