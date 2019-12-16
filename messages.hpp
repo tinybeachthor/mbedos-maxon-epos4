@@ -28,6 +28,8 @@ Outputs:
 
 namespace messages {
 
+  const uint8_t StatuswordData[8] = {0x40,0x41,0x60,0x00,0x00,0x00,0x00,0x00};
+
   enum Controlword : uint16_t {
     Shutdown                   = 0b00000110, // 0xxx x110
     SwitchOn                   = 0b00000111, // 0xxx x111
@@ -112,5 +114,4 @@ namespace messages {
 		ILLEGAL_ERROR                     = 0x0F00FFBF, // Command code is illegal (does not exist)
 		FFC0_WRONG_NMT_STATE              = 0x0F00FFC0, // Device is in wrong NMT state
   };
-
 }

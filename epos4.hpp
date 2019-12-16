@@ -2,7 +2,7 @@
 
 namespace epos4 {
 
-  enum State : uint8_t {
+  enum epos4State : uint8_t {
     NotReadyToSwitchOn  = 0,
     SwitchOnDisabled    = 1,
     ReadyToSwitchOn     = 2,
@@ -20,6 +20,4 @@ namespace epos4 {
   extern void init (PinName rx, PinName tx);
   extern void start ();
   extern void stop ();
-
-  extern uint8_t getState ();
 }

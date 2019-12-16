@@ -22,12 +22,12 @@ int main() {
   pc.printf("Turning motorcontroller on");
   epos4::start();
   wait_us(1000 * 1000);
-  pc.printf("EPOS4 state : %d", epos4::getState());
+  pc.printf("Motorcontroller on");
 
   pc.printf("Turning motorcontroller off");
   epos4::stop();
   wait_us(1000 * 1000);
-  pc.printf("EPOS4 state : %d", epos4::getState());
+  pc.printf("Motorcontroller off");
 
   while (true) {
     led_power = !led_power;
