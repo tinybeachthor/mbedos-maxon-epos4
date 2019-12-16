@@ -26,9 +26,13 @@ Outputs:
   EMCY objects for Emergency Telegrams
 */
 
-namespace messages {
+namespace epos4_messages {
 
-  const uint8_t StatuswordData[8] = {0x40,0x41,0x60,0x00,0x00,0x00,0x00,0x00};
+  // Message format:
+  // 0          1       2      3          4-7
+  // Specifier  Index   Index  Subindex   Data
+
+  const uint8_t StatuswordData[4] = {0x40,0x41,0x60,0x00};
 
   enum Controlword : uint16_t {
     Shutdown                   = 0b00000110, // 0xxx x110
