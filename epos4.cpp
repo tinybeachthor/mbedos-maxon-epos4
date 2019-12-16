@@ -87,12 +87,12 @@ namespace epos4 {
 
     // Shutdown (-> ReadyToSwitchOn)
     can::put(epos4_messages::constructControlword(epos4_messages::Shutdown));
-    Thread::wait(50);
+    ThisThread::sleep_for(50);
     blockForState(ReadyToSwitchOn);
 
     // Set profile position mode (PPM)
     can::put(constructCANMessage(&SetPPM_Data));
-    Thread::wait(50);
+    ThisThread::sleep_for(50);
 
     // Setup units ? TODO
 
@@ -100,11 +100,11 @@ namespace epos4 {
 
     // Switch on  (-> SwitchedOn), allow high voltage
     can::put(epos4_messages::constructControlword(epos4_messages::SwitchedOn));
-    Thread::wait(50);
+    ThisThread::sleep_for(50);
     blockForState(SwitchedOn);
     // Enable operation (-> OperationEnabled), allow torque
     can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation));
-    Thread::wait(50);
+    ThisThread::sleep_for(50);
     blockForState(OperationEnabled);
   }
 
