@@ -32,8 +32,9 @@ namespace epos4_messages {
   // 0          1       2      3          4-7
   // Specifier  Index   Index  Subindex   Data
 
-  const uint8_t StatuswordData[4] = {0x40,0x41,0x60,0x00};
+  const uint8_t StatuswordData[4]  = {0x40,0x41,0x60,0x00};
 
+  const uint8_t ControlwordHeader[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00};
   enum Controlword : uint16_t {
     Shutdown                   = 0b00000110, // 0xxx x110
     SwitchOn                   = 0b00000111, // 0xxx x111
@@ -44,6 +45,20 @@ namespace epos4_messages {
     EnableOperation            = 0b00001111, // 0xxx 1111
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
+
+  inline CANMessage constructControlword(Controlword cw) {
+    CANMessage msg;
+
+    msg.format = CANStandard; // Standard format - 11bits
+    msg.id = 0x600 + 0;       // Function code + NODE_ID (0 = broadcast)
+    memcpy(msg.data, &ControlwordHeader, 8);
+
+    memcpy(msg.data + 4, &cw, 1);
+
+    msg.len = 8;
+
+    return msg;
+  }
 
   enum PPM_Parameters : uint16_t {
 

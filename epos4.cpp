@@ -72,21 +72,74 @@ namespace epos4 {
     return statuswordToState(data);
   }
 
-  void init (PinName rx, PinName tx) {
-    can::init(rx, tx, 500000);
+  void blockForState (epos4State desired) {
+    epos4State state = Unknown;
+    do {
+      state = pollState();
+      pc.printf("Received state : %d", state);
+    }
+    while (state != desired);
+
+    pc.printf("State attained : %d", desired);
   }
 
-  /* void startUp () { */
-  /*   // Wait for SwitchOnDisabled - Statusword */
-  /*   // Send <<Shutdown>>         - Controlword */
-  /*   // Wait for ReadyToSwitchOn */
-  /*   // Send <<SwitchedOn>> */
-  /*   // Wait for SwitchedOn */
-  /*   // Send <<EnableOperation>> */
-  /*   // Wait for OperationEnabled */
+  void init (PinName rx, PinName tx) {
+    can::init(rx, tx, 500000);
 
-  /*   // Setup units ? */
-  /* } */
+    // NMT -> Operational ? : TODO
+  }
+
+  void startPosMode () {
+    blockForState(SwitchOnDisabled);
+    can::put(epos4_messages::constructControlword(
+          epos4_messages::SwitchOnAndEnableOperation));
+
+/* const char SwitchOnDisabled_Data[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00}; */
+/* const char ReadyForSwitchOn_Data[8] = {0x2B,0x40,0x60,0x00,0x06,0x00,0x00,0x00}; */
+/* const char SwitchOn_Data[8] = {0x2B,0x40,0x60,0x00,0x07,0x00,0x00,0x00}; */
+/* const char OperationEnable_Data[8] = {0x2B,0x40,0x60,0x00,0x0F,0x00,0x00,0x00}; */
+/* const char ReSet1_Data[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00}; */
+/* const char ReSet2_Data[8] = {0x2B,0x40,0x60,0x00,0x80,0x00,0x00,0x00}; */
+/* const char StatusWord_Data[4] = {0x40,0x41,0x60,0x00}; */
+/* const char Pos_Mode_Data[8] = {0x2F,0x60,0x60,0x00,0xFF,0x00,0x00,0x00}; */
+/* const char Req_Current_Pos_Data[4] = {0x40,0x64,0x60,0x00}; */
+/* const char Homing_Mode_Data[8] = {0x2F,0x60,0x60,0x00,0x06,0x00,0x00,0x00}; */
+/* const char Homing_Method_Data_positive[8] = {0x2F,0x98,0x60,0x00,0xFD,0x00,0x00,0x00}; */
+/* const char Homing_Method_Data_negative[8] = {0x2F,0x98,0x60,0x00,0xFC,0x00,0x00,0x00}; */
+/* const char StartHoming_Data[8] = {0x2B,0x40,0x60,0x00,0x1F,0x00,0x00,0x00}; */
+/* const char Homing_Method_current_pos_Data[8] = {0x2F,0x60,0x60,0x00,0x23,0x00,0x00,0x00}; */
+
+    /* //SwitchOnDisabled */
+    /* int foo=0; */
+    /* foo += can.write(SwitchOnDisabled()); */
+    /* Thread::wait(50); */
+
+    /* //ReSet */
+    /* foo += can.write(ReSet1()); */
+    /* Thread::wait(50); */
+
+    /* //ReSet */
+    /* foo += can.write(ReSet2()); */
+    /* Thread::wait(50); */
+
+    /* //ReadyForSwitchOn */
+    /* foo += can.write(ReadyForSwitchOn()); */
+    /* Thread::wait(50); */
+
+    /* //Pos_Mode */
+    /* foo += can.write(Pos_Mode()); */
+    /* Thread::wait(50); */
+
+    /* //SwitchOn */
+    /* foo += can.write(SwitchOn()); */
+    /* Thread::wait(50); */
+
+    /* //OperationEnable */
+    /* foo += can.write(OperationEnable()); */
+    /* Thread::wait(50); */
+
+    // Setup units ?
+  }
 
   /* void quickStop () { */
   /*   // Send <<Quickstop>> controlword */
