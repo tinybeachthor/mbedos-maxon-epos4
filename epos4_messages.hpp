@@ -6,11 +6,17 @@
 /*
 Profile Position Modular (PPM)
 
+Settings:
+  Max gear input speed    0x3003
+
 Inputs:
+  Target position         0x607A
+
   Profile velocity        0x6081
   Max profile velocity    0x607F
-  Target position         0x607A
   Software position limit 0x607D
+  Max acceleration        0x60C5
+  Max motor speed         0x6080
 
   Controlword             0x6040
 
@@ -24,25 +30,28 @@ Outputs:
   Statusword              0x6041
 
   EMCY objects for Emergency Telegrams
+
 */
 
-/* const char ReadyForSwitchOn_Data[8] = {0x2B,0x40,0x60,0x00,0x06,0x00,0x00,0x00}; */
-/* const char SwitchOn_Data[8] = {0x2B,0x40,0x60,0x00,0x07,0x00,0x00,0x00}; */
-
-/* const char ReSet1_Data[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00}; */
-/* const char ReSet2_Data[8] = {0x2B,0x40,0x60,0x00,0x80,0x00,0x00,0x00}; */
-/* const char Pos_Mode_Data[8] = {0x2F,0x60,0x60,0x00,0xFF,0x00,0x00,0x00}; */
-/* const char Req_Current_Pos_Data[4] = {0x40,0x64,0x60,0x00}; */
-
 namespace epos4_messages {
-
   // Message format:
-  // 0          1       2      3          4-7
-  // Specifier  Index   Index  Subindex   Data
+  // 0          1-2     3          4-7
+  // Specifier  Index   Subindex   Data
+  //
+  // Specifier:
+  // | | | |0|n|n|e|s|
+  //  0 0 1             - Download (to slave)
+  //  0 1 0             - Upload   (from slave)
+  //
+  // nn - #bytes *not* used in data (bytes 4-6)
+  // e  - expedited (full message in single frame)
+  // s  - if 1 then data size in nn is to be used
 
-  const uint8_t StatuswordData[4]  = {0x40,0x41,0x60,0x00};
+  const uint8_t SetPPM_Data[8] = {0x2F,0x60,0x60,0x00,0xFF,0x00,0x00,0x00};
 
-  const uint8_t ControlwordHeader[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00};
+  const uint8_t Statusword_Data[4]  = {0x40,0x41,0x60,0x00};
+
+  const uint8_t Controlword_Header[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00};
   enum Controlword : uint16_t {
     Shutdown                   = 0b00000110, // 0xxx x110
     SwitchOn                   = 0b00000111, // 0xxx x111
@@ -57,8 +66,8 @@ namespace epos4_messages {
     CANMessage msg;
 
     msg.format = CANStandard; // Standard format - 11bits
-    msg.id = 0x600 + 0;       // Function code + NODE_ID (0 = broadcast)
-    memcpy(msg.data, &ControlwordHeader, 8);
+    msg.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
+    memcpy(msg.data, &Controlword_Header, 8);
 
     memcpy(msg.data + 4, &cw, 1);
 
@@ -66,52 +75,6 @@ namespace epos4_messages {
 
     return msg;
   }
-
-  enum PPM_Parameters : uint16_t {
-
-    // Configuration
-    SOFTWARE_POSITION_LIMIT = 0x607D, // ARRAY - 1-2 subindex
-      // subindex 1 - INTEGER32 Min Position Limit
-      // subindex 2 - INTEGER32 Max Position Limit
-
-    MAX_PROFILE_VELOCITY    = 0x607F, // UNSIGNED32
-    MAX_MOTOR_SPEED         = 0x6080, // UNSIGNED32
-
-    MAX_GEAR_INPUT_SPEED    = 0x3003, // RECORD - 1-4 subindex
-      // subindex 1 - UNSIGNED32 Gear reduction numerator
-      // subindex 2 - UNSIGNED32 Gear reduction denominator
-      // subindex 3 - UNSIGNED32 Max gear input speed
-      // subindex 4 - UNSIGNED32 Gear miscellaneous configuration
-        // bits 31..1 - reserved
-        // bit 0 - Gear direction = 0 - Normal; 1 - Inverted;
-
-    QUICK_STOP_DECELERATION = 0x6085, // UNSIGNED32
-    MAX_ACCELERATION        = 0x60C5, // UNSIGNED32
-
-    // Commanding
-    CONTROLWORD             = 0x6040, // UNSIGNED16
-      // Supervision of operating modes
-      // Bit
-      // 15     Endless movement (in PPM), Reserved in other modes
-      // 14..9  Reserved
-      // 8      Halt (in PPM, PVM, HMM)
-      // 7      Fault Reset
-      // 6      Abs / rel (in PPM), Reserved in other modes
-      // 5      Change set immediately (in PPM), Reserved in other modes
-      // 4      New setpoint (in PPM), Homin operating start (in HMM)
-      // 3      Enable operation
-      // 2      Quick stop
-      // 1      Enable voltage
-      // 0      Switched on
-
-    TARGET_POSITION         = 0x607A, // INTEGER32
-    PROFILE_VELOCITY        = 0x6081, // UNSIGNED32
-    PROFILE_ACCELERATION    = 0x6083, // UNSIGNED32
-    PROFILE_DECCELERATION   = 0x6084, // UNSIGNED32
-
-    MOTION_PROFILE_TYPE     = 0x6086, // INTEGER16
-      // 0 - linear ramp (trapezoidal profile)
-  };
 
   enum ErrorCodes : uint32_t {
     NO_ABORT                          = 0x00000000, // Communication successful
