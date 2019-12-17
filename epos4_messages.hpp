@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 /*
-Profile Position Modular (PPM)
+Profile Position Mode (PPM)
 
 Settings:
   Max gear input speed    0x3003
@@ -43,15 +43,16 @@ namespace epos4_messages {
   //  0 0 1             - Download (to slave)
   //  0 1 0             - Upload   (from slave)
   //
-  // nn - #bytes *not* used in data (bytes 4-6)
+  // nn - #bytes *not* used in data (bytes 4-7)
   // e  - expedited (full message in single frame)
   // s  - if 1 then data size in nn is to be used
 
-  const uint8_t SetPPM_Data[8] = {0x2F,0x60,0x60,0x00,0xFF,0x00,0x00,0x00};
+  // 0x6060 Modes of operation
+  // UINT8 [ PPM = 0x01 ]
+  const uint8_t SetPPM_Data[8] = {0x2F,0x60,0x60,0x00,0x01,0x00,0x00,0x00};
 
   const uint8_t Statusword_Data[4]  = {0x40,0x41,0x60,0x00};
 
-  const uint8_t Controlword_Header[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00};
   enum Controlword : uint16_t {
     Shutdown                   = 0b00000110, // 0xxx x110
     SwitchOn                   = 0b00000111, // 0xxx x111
@@ -63,11 +64,13 @@ namespace epos4_messages {
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
   inline CANMessage constructControlword(Controlword cw) {
+    const uint8_t msgTemplate[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00};
+
     CANMessage msg;
 
     msg.format = CANStandard; // Standard format - 11bits
     msg.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
-    memcpy(msg.data, &Controlword_Header, 8);
+    memcpy(msg.data, &msgTemplate, 8);
 
     memcpy(msg.data + 4, &cw, 1);
 

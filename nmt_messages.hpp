@@ -47,5 +47,4 @@ namespace nmt_messages {
 
     return msg;
   }
-
 }
