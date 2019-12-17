@@ -48,17 +48,6 @@ private:
   Operational
     SDO, PDO, EMCY, NMT
 
-  State transition
-    NMT object
-      Identifier 0, 2 bytes
-        | 0 CS | 1 Node-ID |
-        | 0x80 | 0 (all)   | All CANOpen will enter Pre-Operational
-        | 0x82 | 0         | Reset Communication
-        | 0x81 | 0         | Reset Node
-        | 0x01 | 0         | Start - Enter Operational
-        | 0x02 | 0         | Stop  - Enter Stopped
-
-      Node-ID - 0 for all, n for ID
   */
   enum nmt_state : uint8_t {
     Initialization = 0,
@@ -66,9 +55,6 @@ private:
     Operational    = 2,
     Stopped        = 3,
   };
-
-/*   bool goToState (State nextState); */
-/*   bool resetCommunication (); */
 
   Mutex nmt_access;
   ConditionVariable* nmt_cond;

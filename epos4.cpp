@@ -1,6 +1,7 @@
 #include "epos4.hpp"
 
 #include "can.hpp"
+#include "nmt_messages.hpp"
 #include "epos4_messages.hpp"
 
 #include "debug.hpp"
@@ -98,7 +99,7 @@ Epos4::Epos4 (PinName rx, PinName tx) {
   block_for_nmt_state(nmt_state.PreOperational);
 
   // Go to Operational NMT state
-  nmtOperational();
+  can::put(nmt_messages::construct(nmt_messages::Operational));
   block_for_nmt_state(nmt_state.Operational);
 }
 
