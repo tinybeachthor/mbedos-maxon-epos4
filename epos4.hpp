@@ -1,4 +1,8 @@
+#pragma once
+
 #include "mbed.h"
+
+#include "can.hpp"
 
 #include "debug.hpp"
 
@@ -18,7 +22,8 @@ private:
     while (true) {
       // wait for + handle CAN message (state transitions)
 
-      CANMessage msg = can::get(osWaitForever);
+      CANMessage msg;
+      can::get(msg, osWaitForever);
       pc.printf("Got CAN message : COB-ID=%X", msg.id);
 
       // HEARTBEAT
@@ -27,8 +32,8 @@ private:
         pc.printf("Got HEARTBEAT from node : %d", node_id);
 
         nmt_access.lock();
-        if (nmt_current_state == nmt_state.Initialization)
-          nmt_current_state = nmt_state.PreOperational;
+        if (nmt_current_state == nmt_state::Initialization)
+          nmt_current_state = nmt_state::PreOperational;
         nmt_access.unlock();
       }
     }
@@ -63,7 +68,7 @@ private:
   void block_for_nmt_state(nmt_state desired_state) {
     nmt_access.lock();
     while (nmt_current_state != desired_state) {
-      nmt_cond.wait();
+      nmt_cond->wait();
     }
     nmt_access.unlock();
   }

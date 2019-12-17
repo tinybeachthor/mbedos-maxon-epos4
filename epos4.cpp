@@ -1,6 +1,5 @@
 #include "epos4.hpp"
 
-#include "can.hpp"
 #include "nmt_messages.hpp"
 #include "epos4_messages.hpp"
 
@@ -93,14 +92,14 @@ Epos4::Epos4 (PinName rx, PinName tx) {
   nmt_cond = new ConditionVariable(nmt_access);
 
   can::init(rx, tx, 500000);
-  can_listener.start(&this->can_handler_routine);
+  can_listener.start(callback(this, &Epos4::can_handler_routine));
 
   // Wait for the first HEARTBEAT message to arrive
-  block_for_nmt_state(nmt_state.PreOperational);
+  block_for_nmt_state(nmt_state::PreOperational);
 
   // Go to Operational NMT state
   can::put(nmt_messages::construct(nmt_messages::Operational));
-  block_for_nmt_state(nmt_state.Operational);
+  block_for_nmt_state(nmt_state::Operational);
 }
 
 void Epos4::startPosMode () {
@@ -130,7 +129,7 @@ void Epos4::startPosMode () {
 }
 
 void Epos4::stop () {
-  // TODO
+  // TODO stop
 }
 
 /* void quickStop () { */
