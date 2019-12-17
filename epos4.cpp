@@ -5,21 +5,6 @@
 
 #include "debug.hpp"
 
-enum epos4State : uint8_t {
-  NotReadyToSwitchOn  = 0,
-  SwitchOnDisabled    = 1,
-  ReadyToSwitchOn     = 2,
-  SwitchedOn          = 3,
-
-  OperationEnabled    = 4,
-  QuickStopActive     = 5,
-
-  FaultReactionActive = 6,
-  Fault               = 7,
-
-  Unknown             = 255,
-};
-
 CANMessage constructCANMessage (const uint8_t* raw) {
   CANMessage out;
   out.format = CANStandard; // Standard format - 11bits
@@ -30,32 +15,7 @@ CANMessage constructCANMessage (const uint8_t* raw) {
   return out;
 }
 
-epos4State statuswordToState(uint16_t statusword) {
-  uint8_t lowByte = (uint8_t)(statusword & 0xFF);
-
-  lowByte &= 0b01101111; // null 7 and 5 bits
-
-  if (lowByte == 0b00000000)
-    return NotReadyToSwitchOn;
-  else if (lowByte == 0b01000000)
-    return SwitchOnDisabled;
-  else if (lowByte == 0b00100001)
-    return ReadyToSwitchOn;
-  else if (lowByte == 0b00100011)
-    return SwitchedOn;
-  else if (lowByte == 0b00100111)
-    return OperationEnabled;
-  else if (lowByte == 0b00000111)
-    return QuickStopActive;
-  else if (lowByte == 0b00001111)
-    return FaultReactionActive;
-  else if (lowByte == 0b00001000)
-    return Fault;
-
-  return Unknown;
-}
-
-epos4State pollState () {
+Epos4::epos_state Epos4::pollState () {
 
   // TODO : transition to states
 
@@ -76,9 +36,9 @@ epos4State pollState () {
   return statuswordToState(data);
 }
 
-void blockForState (epos4State desired) {
+void Epos4::blockForState (Epos4::epos_state desired) {
   pc.printf("Waiting for state : %d\n", desired);
-  epos4State state = Unknown;
+  epos_state state = Unknown;
   do {
     state = pollState();
     pc.printf("Received state : %d\n", state);
@@ -88,8 +48,9 @@ void blockForState (epos4State desired) {
   pc.printf("State attained : %d\n", desired);
 }
 
-Epos4::Epos4 (PinName rx, PinName tx) {
-  nmt_current_state = nmt_state::Initialization;
+Epos4::Epos4 (PinName rx, PinName tx)
+  : nmt_current_state(NMT_Unknown)
+{
   nmt_cond = new ConditionVariable(nmt_access);
 
   can::init(rx, tx, 500000);
