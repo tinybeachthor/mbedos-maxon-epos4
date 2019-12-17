@@ -38,17 +38,17 @@ namespace can {
       memcpy(&msg, received, sizeof(CANMessage));
 
       if (rx_buffer.free(received)) {
-        pc.printf("CAN_RX_FREE_FAIL");
+        pc.printf("CAN_RX_FREE_FAIL\n");
       }
 
       return true;
     }
     else if (evt.status == osEventTimeout) {
-      pc.printf("CAN_RX_TIMEOUT");
+      pc.printf("CAN_RX_TIMEOUT\n");
       return false;
     }
 
-    pc.printf("CAN_RX_ERROR");
+    pc.printf("CAN_RX_ERROR\n");
     return false;
   }
 

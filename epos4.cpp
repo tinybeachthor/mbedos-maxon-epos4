@@ -77,15 +77,15 @@ epos4State pollState () {
 }
 
 void blockForState (epos4State desired) {
-  pc.printf("Waiting for state : %d", desired);
+  pc.printf("Waiting for state : %d\n", desired);
   epos4State state = Unknown;
   do {
     state = pollState();
-    pc.printf("Received state : %d", state);
+    pc.printf("Received state : %d\n", state);
   }
   while (state != desired);
 
-  pc.printf("State attained : %d", desired);
+  pc.printf("State attained : %d\n", desired);
 }
 
 Epos4::Epos4 (PinName rx, PinName tx) {
@@ -96,6 +96,8 @@ Epos4::Epos4 (PinName rx, PinName tx) {
 
   // Wait for the first HEARTBEAT message to arrive
   block_for_nmt_state(nmt_state::PreOperational);
+
+  pc.printf("Got to NMT PreOperational\n");
 
   // Go to Operational NMT state
   can::put(nmt_messages::construct(nmt_messages::Operational));

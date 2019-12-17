@@ -24,12 +24,12 @@ private:
 
       CANMessage msg;
       can::get(msg, osWaitForever);
-      pc.printf("Got CAN message : COB-ID=%X", msg.id);
+      pc.printf("Got CAN message : COB-ID=%X\n", msg.id);
 
       // HEARTBEAT
       if (msg.id > 0x700) {
         uint8_t node_id = msg.id - 0x700;
-        pc.printf("Got HEARTBEAT from node : %d", node_id);
+        pc.printf("Got HEARTBEAT from node : %d\n", node_id);
 
         nmt_access.lock();
         if (nmt_current_state == nmt_state::Initialization)
