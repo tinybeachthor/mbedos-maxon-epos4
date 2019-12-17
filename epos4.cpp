@@ -94,9 +94,12 @@ Epos4::Epos4 (PinName rx, PinName tx) {
   can::init(rx, tx, 500000);
   can_listener.start(&this->can_handler_routine);
 
+  // Wait for the first HEARTBEAT message to arrive
   block_for_nmt_state(nmt_state.PreOperational);
 
-  // TODO wait for NMT -> Operational
+  // Go to Operational NMT state
+  nmtOperational();
+  block_for_nmt_state(nmt_state.Operational);
 }
 
 void Epos4::startPosMode () {
@@ -111,9 +114,9 @@ void Epos4::startPosMode () {
   can::put(constructCANMessage(epos4_messages::SetPPM_Data));
   ThisThread::sleep_for(50);
 
-  // Setup units ? TODO
+  // TODO ? Setup units
 
-  // Setup PDOs ? TODO
+  // TODO ? Setup PDOs
 
   // Switch on  (-> SwitchedOn), allow high voltage
   can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn));
@@ -128,9 +131,6 @@ void Epos4::startPosMode () {
 void Epos4::stop () {
   // TODO
 }
-
-
-
 
 /* void quickStop () { */
 /*   // Send <<Quickstop>> controlword */
