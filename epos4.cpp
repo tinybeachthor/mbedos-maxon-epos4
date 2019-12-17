@@ -57,7 +57,8 @@ epos4State statuswordToState(uint16_t statusword) {
 
 epos4State pollState () {
 
-  // TODO : thread listen for messages + transition to states
+  // TODO : transition to states
+
   // TODO : sync state reading + block for update here
 
   CANMessage out;
@@ -88,10 +89,14 @@ void blockForState (epos4State desired) {
 }
 
 Epos4::Epos4 (PinName rx, PinName tx) {
-  can::init(rx, tx, 500000);
+  nmt_cond = new ConditionVariable(nmt_access);
 
-  // TODO : listen for heartbeat -> get NODE_ID
-  // NMT -> Operational TODO
+  can::init(rx, tx, 500000);
+  can_listener.start(&this->can_handler_routine);
+
+  block_for_nmt_state(nmt_state.PreOperational);
+
+  // TODO wait for NMT -> Operational
 }
 
 void Epos4::startPosMode () {
@@ -139,45 +144,6 @@ void Epos4::stop () {
 /* void resetError() { */
 /*   // Send <<Fault reset>> controlword */
 /*   // Wait for SwitchOnDisabled */
-/* } */
-
-/* namespace NMT { */
-
-  /*
-  Automatically on boot
-  Initialization -> Pre-Operational
-
-  Pre-operational
-    Can be configured using SDO communication.
-    Emergency objects.
-    NMT Protocol to transition state.
-    No PDO communication.
-
-  Operational
-    SDO, PDO, EMCY, NMT
-
-  State transition
-    NMT object
-      Identifier 0, 2 bytes
-        | 0 CS | 1 Node-ID |
-        | 0x80 | 0 (all)   | All CANOpen will enter Pre-Operational
-        | 0x82 | 0         | Reset Communication
-        | 0x81 | 0         | Reset Node
-        | 0x01 | 0         | Start - Enter Operational
-        | 0x02 | 0         | Stop  - Enter Stopped
-
-      Node-ID - 0 for all, n for ID
-  */
-
-/*   enum State { */
-/*     Initialization, */
-/*     PreOperational, */
-/*     Operational, */
-/*     Stopped, */
-/*   }; */
-
-/*   bool goToState (State nextState); */
-/*   bool resetCommunication (); */
 /* } */
 
 /* namespace EMCY { */
