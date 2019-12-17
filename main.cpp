@@ -1,5 +1,4 @@
 #include "mbed.h"
-#include <inttypes.h>
 
 #include "epos4.hpp"
 
@@ -12,9 +11,8 @@ int main() {
 
   pc.printf("Starting up...");
 
-  // TODO : CAN pins
-  PinName can_rx;
-  PinName can_tx;
+  PinName can_rx = PD_0;
+  PinName can_tx = PD_1;
 
   Epos4 mc(can_rx, can_tx);
   pc.printf("Setup complete!");
