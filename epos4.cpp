@@ -89,6 +89,7 @@ void blockForState (epos4State desired) {
 }
 
 Epos4::Epos4 (PinName rx, PinName tx) {
+  nmt_current_state = nmt_state::Initialization;
   nmt_cond = new ConditionVariable(nmt_access);
 
   can::init(rx, tx, 500000);
@@ -96,12 +97,12 @@ Epos4::Epos4 (PinName rx, PinName tx) {
 
   // Wait for the first HEARTBEAT message to arrive
   block_for_nmt_state(nmt_state::PreOperational);
-
   pc.printf("Got to NMT PreOperational\n");
 
   // Go to Operational NMT state
   can::put(nmt_messages::construct(nmt_messages::Operational));
   block_for_nmt_state(nmt_state::Operational);
+  pc.printf("Got to NMT Operational\n");
 }
 
 void Epos4::startPosMode () {

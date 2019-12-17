@@ -24,7 +24,7 @@ private:
 
       CANMessage msg;
       can::get(msg, osWaitForever);
-      pc.printf("Got CAN message : COB-ID=%X\n", msg.id);
+      pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
       // HEARTBEAT
       if (msg.id > 0x700) {
@@ -34,6 +34,7 @@ private:
         nmt_access.lock();
         if (nmt_current_state == nmt_state::Initialization)
           nmt_current_state = nmt_state::PreOperational;
+        nmt_cond->notify_all();
         nmt_access.unlock();
       }
     }
