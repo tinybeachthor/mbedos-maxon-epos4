@@ -78,29 +78,29 @@ namespace epos4_messages {
 
   enum ErrorCodes : uint32_t {
     NO_ABORT                          = 0x00000000, // Communication successful
-		TOGGLE_ERROR                      = 0x05030000, // Toggle bit not alternated
-		SDO_TIMEOUT                       = 0x05040000, // SDO protocol timed out
-		COMMAND_UNKNOWN                   = 0x05040001, // Command specifier unknown
-		CRC_ERROR                         = 0x05040004, // CRC check failed
-		ACCESS_ERROR                      = 0x06010000, // Unsupported access to an object
-		WRITE_ONLY_ERROR                  = 0x06010001, // Read command to a write only object
-		READ_ONLY_ERROR                   = 0x06010002, // Write command to a read only object
+    TOGGLE_ERROR                      = 0x05030000, // Toggle bit not alternated
+    SDO_TIMEOUT                       = 0x05040000, // SDO protocol timed out
+    COMMAND_UNKNOWN                   = 0x05040001, // Command specifier unknown
+    CRC_ERROR                         = 0x05040004, // CRC check failed
+    ACCESS_ERROR                      = 0x06010000, // Unsupported access to an object
+    WRITE_ONLY_ERROR                  = 0x06010001, // Read command to a write only object
+    READ_ONLY_ERROR                   = 0x06010002, // Write command to a read only object
     SUBINDEX_CANNOT_BE_WRITTEN        = 0x06010003, // Subindex cannot be written, subindex must be "0" for write access
-		OBJECT_DOES_NOT_EXIST             = 0x06020000, // Last read or write command had wrong object index or subindex
-		PDO_MAPPING_ERROR                 = 0x06040041, // Object is not mappable to the PDO
-		PDO_LENGTH_ERROR                  = 0x06040042, // Number and length of objects to be mapped would exceed PDO length
-		GENERAL_PARAMETER_INCOMPATIBILITY = 0x06040043, // General parameter incompatibility
-		GENERAL_INTERNAL_INCOMPATIBILITY  = 0x06040047, // General internal incompatibility in device
-		HARDWARE_ERROR                    = 0x06060000, // Access failed due to hardware error
-		SERVICE_PARAMETER_ERROR           = 0x06070010, // Data type does not match, length or service parameter do not match
+    OBJECT_DOES_NOT_EXIST             = 0x06020000, // Last read or write command had wrong object index or subindex
+    PDO_MAPPING_ERROR                 = 0x06040041, // Object is not mappable to the PDO
+    PDO_LENGTH_ERROR                  = 0x06040042, // Number and length of objects to be mapped would exceed PDO length
+    GENERAL_PARAMETER_INCOMPATIBILITY = 0x06040043, // General parameter incompatibility
+    GENERAL_INTERNAL_INCOMPATIBILITY  = 0x06040047, // General internal incompatibility in device
+    HARDWARE_ERROR                    = 0x06060000, // Access failed due to hardware error
+    SERVICE_PARAMETER_ERROR           = 0x06070010, // Data type does not match, length or service parameter do not match
     SERVICE_PARAMETER_TOO_SHORT_ERROR = 0x06070013, // Data types don't match, length of service parameter too long
-		SUBINDEX_ERROR                    = 0x06090011, // Last read or write command had wrong object subindex
-		VALUE_RANGE                       = 0x06090030, // Value range of parameter exceeded
-		GENERAL_ERROR                     = 0x08000000, // General error
-		TRANSFER_OR_STORE_ERROR           = 0x08000020, // Data cannot be transferred or stored
-		WRONG_DEVICE_STATE                = 0x08000022, // Data cannot be transferred or stored to application because of present device state
-		PASSWORD_ERROR                    = 0x0F00FFBE, // Password is incorrect
-		ILLEGAL_ERROR                     = 0x0F00FFBF, // Command code is illegal (does not exist)
-		FFC0_WRONG_NMT_STATE              = 0x0F00FFC0, // Device is in wrong NMT state
+    SUBINDEX_ERROR                    = 0x06090011, // Last read or write command had wrong object subindex
+    VALUE_RANGE                       = 0x06090030, // Value range of parameter exceeded
+    GENERAL_ERROR                     = 0x08000000, // General error
+    TRANSFER_OR_STORE_ERROR           = 0x08000020, // Data cannot be transferred or stored
+    WRONG_DEVICE_STATE                = 0x08000022, // Data cannot be transferred or stored to application because of present device state
+    PASSWORD_ERROR                    = 0x0F00FFBE, // Password is incorrect
+    ILLEGAL_ERROR                     = 0x0F00FFBF, // Command code is illegal (does not exist)
+    FFC0_WRONG_NMT_STATE              = 0x0F00FFC0, // Device is in wrong NMT state
   };
 }
