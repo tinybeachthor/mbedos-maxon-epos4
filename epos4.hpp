@@ -1,23 +1,12 @@
 #include "mbed.h"
 
-namespace epos4 {
+class Epos4 {
 
-  enum epos4State : uint8_t {
-    NotReadyToSwitchOn  = 0,
-    SwitchOnDisabled    = 1,
-    ReadyToSwitchOn     = 2,
-    SwitchedOn          = 3,
+public:
+  Epos4 (PinName rx, PinName tx);
 
-    OperationEnabled    = 4,
-    QuickStopActive     = 5,
+  void startPosMode ();
+  void stop ();
 
-    FaultReactionActive = 6,
-    Fault               = 7,
-
-    Unknown             = 255,
-  };
-
-  extern void init (PinName rx, PinName tx);
-  extern void startPosMode ();
-  extern void stop ();
-}
+private:
+};

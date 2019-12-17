@@ -15,17 +15,17 @@ int main() {
   PinName can_rx; // TODO
   PinName can_tx; // TODO
 
-  epos4::init(can_rx, can_tx);
+  Epos4 mc(can_rx, can_tx);
   pc.printf("Setup complete!");
   wait_us(1000 * 1000);
 
   pc.printf("Turning motorcontroller on");
-  epos4::startPosMode();
+  mc.startPosMode();
   wait_us(1000 * 1000);
   pc.printf("Motorcontroller on");
 
   pc.printf("Turning motorcontroller off");
-  epos4::stop();
+  mc.stop();
   wait_us(1000 * 1000);
   pc.printf("Motorcontroller off");
 
