@@ -18,8 +18,7 @@ namespace nmt_messages {
     | 0x81 | 0         | Reset Node
     | 0x01 | 0         | Start - Enter Operational
     | 0x02 | 0         | Stop  - Enter Stopped
-
-  Node-ID - 0 for all, n for ID
+  *Node-ID - 0 for all, n for ID
 
   */
 
@@ -48,4 +47,5 @@ namespace nmt_messages {
 
     return msg;
   }
+
 }

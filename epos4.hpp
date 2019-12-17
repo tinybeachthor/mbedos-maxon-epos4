@@ -26,40 +26,47 @@ private:
       can::get(msg, osWaitForever);
       pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
-      // HEARTBEAT
+      // HEARTBEAT (read NMT state)
       if (msg.id > 0x700) {
         uint8_t node_id = msg.id - 0x700;
-        pc.printf("Got HEARTBEAT from node : %d\n", node_id);
+        uint8_t state = *((uint8_t*)msg.data);
+        pc.printf("Got HEARTBEAT from node#%d NMT state : %X\n", node_id, state);
 
         nmt_access.lock();
-        if (nmt_current_state == nmt_state::Initialization)
-          nmt_current_state = nmt_state::PreOperational;
+        nmt_current_state = state;
         nmt_cond->notify_all();
         nmt_access.unlock();
       }
     }
   }
 
-  /* NMT States
+  /* Heartbeat = NMT state
+
+  Function code = 0x700 + NODE_ID
+
+  Node's state in the first data byte.
+
+  -----------------------------------------------------
 
   Automatically on boot
   Initialization -> Pre-Operational
 
   Pre-operational
-    Can be configured using SDO communication.
     Emergency objects.
+    Can be configured using SDO communication.
     NMT Protocol to transition state.
-    No PDO communication.
+
+    NO PDO COMMUNICATION!
 
   Operational
     SDO, PDO, EMCY, NMT
 
   */
   enum nmt_state : uint8_t {
-    Initialization = 0,
-    PreOperational = 1,
-    Operational    = 2,
-    Stopped        = 3,
+    BootUp = 0x00,
+    Operational = 0x05,
+    PreOperational = 0x7F,
+    Stopped = 0x04,
   };
 
   Mutex nmt_access;

@@ -95,11 +95,11 @@ Epos4::Epos4 (PinName rx, PinName tx) {
   can::init(rx, tx, 500000);
   can_listener.start(callback(this, &Epos4::can_handler_routine));
 
-  // Wait for the first HEARTBEAT message to arrive
+  // Wait for first HEARTBEAT message to arrive
   block_for_nmt_state(nmt_state::PreOperational);
   pc.printf("Got to NMT PreOperational\n");
 
-  // Go to Operational NMT state
+  // Go to NMT Operational
   can::put(nmt_messages::construct(nmt_messages::Operational));
   block_for_nmt_state(nmt_state::Operational);
   pc.printf("Got to NMT Operational\n");
