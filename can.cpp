@@ -28,11 +28,7 @@ namespace can {
 
   InterruptableCAN* _bus;
 
-  rtos::Semaphore _lock(1);
   rtos::Semaphore tx_avail(1, 1);
-
-  uint32_t rx_put_fail_count = 0;
-  uint32_t rx_buffer_full_count = 0;
 
   bool get (CANMessage& msg, uint32_t timeout = osWaitForever) {
     osEvent evt = rx_buffer.get(timeout);
@@ -67,28 +63,29 @@ namespace can {
   void read_irq () {
     CANMessage* msg = rx_buffer.alloc();
 
-    // if the buffer is full, drop the newly arrived message so we can keep running.
     if (msg == nullptr) {
+      // if the buffer is full, drop the newly arrived message so we can keep running.
       CANMessage temp;
       _bus->read(temp);
 
       led_error = true;
-
-      return;
     }
+    else {
+      // read msg and pass to rx_buffer
+      _bus->read(*msg);
 
-    _bus->read(*msg);
-
-    if (rx_buffer.put(msg) != osOK) {
-      // message was not passed properly
-
-      led_error = true;
+      if (rx_buffer.put(msg) != osOK) {
+        // message was not passed properly
+        led_error = true;
+      }
     }
   }
 
   void write_irq () { tx_avail.release(); }
 
   void init (PinName rx, PinName tx, uint32_t baudrate = 500000) {
+    EventQueue *queue = mbed_event_queue();
+
     _bus = new InterruptableCAN(rx, tx, baudrate),
     _bus->frequency(baudrate);
 

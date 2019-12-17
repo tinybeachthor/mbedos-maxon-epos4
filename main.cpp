@@ -12,8 +12,9 @@ int main() {
 
   pc.printf("Starting up...");
 
-  PinName can_rx; // TODO
-  PinName can_tx; // TODO
+  // TODO : CAN pins
+  PinName can_rx;
+  PinName can_tx;
 
   Epos4 mc(can_rx, can_tx);
   pc.printf("Setup complete!");
