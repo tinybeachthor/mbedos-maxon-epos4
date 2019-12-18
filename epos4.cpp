@@ -55,7 +55,16 @@ void Epos4::startPosMode () {
 }
 
 void Epos4::stop () {
-  // TODO stop
+  quickStop();
+
+  epos_access.lock();
+  epos_state state = epos_current_state;
+  epos_access.unlock();
+
+  if (state == QuickStopActive) {
+    can::put(epos4_messages::constructControlword(epos4_messages::DisableVoltage, NODE_ID));
+    block_for_epos_state(SwitchOnDisabled);
+  }
 }
 
 void Epos4::quickStop () {
