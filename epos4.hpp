@@ -44,7 +44,7 @@ private:
         pc.printf("Got HEARTBEAT from node#%d NMT state : %X\n", node_id, state);
 
         nmt_access.lock();
-        nmt_current_state = state;
+        nmt_current_state = to_nmt_state(state);
         nmt_cond->notify_all();
         nmt_access.unlock();
       }
@@ -139,5 +139,16 @@ private:
       nmt_cond->wait();
     }
     nmt_access.unlock();
+  }
+
+  nmt_state to_nmt_state (uint8_t state) {
+    switch (state) {
+      case BootUp: return BootUp;
+      case PreOperational: return PreOperational;
+      case Operational: return Operational;
+      case Stopped: return Stopped;
+
+      default: return NMT_Unknown;
+    }
   }
 };
