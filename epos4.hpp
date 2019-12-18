@@ -39,13 +39,31 @@ private:
       can::get(msg, osWaitForever);
       pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
-      // TODO : transition epos states
-  /* uint16_t data; */
-  /* memcpy(&data, in.data, in.len); */
-  /* return statuswordToState(data); */
+      // TRANSMIT SDO (data from slave)
+      if (msg.id > 0x580) {
+        uint8_t node_id = msg.id - 0x580;
+        uint16_t index;
+        memcpy(&index, msg.data + 1, 2);
 
+        switch (index) {
+          // STATUSWORD
+          case 0x6041: {
+            uint16_t data;
+            memcpy(&data, msg.data + 4, 2);
+            epos_state state = statuswordToState(data);
+
+            pc.printf("Got STATUSWORD from node#%d EPOS state : %X\n", node_id, state);
+
+            epos_access.lock();
+            epos_current_state = state;
+            epos_cond->notify_all();
+            epos_access.unlock();
+          }
+          break;
+        }
+      }
       // HEARTBEAT (read NMT state)
-      if (msg.id > 0x700) {
+      else if (msg.id > 0x700) {
         uint8_t node_id = msg.id - 0x700;
         uint8_t state = *((uint8_t*)msg.data);
         pc.printf("Got HEARTBEAT from node#%d NMT state : %X\n", node_id, state);
