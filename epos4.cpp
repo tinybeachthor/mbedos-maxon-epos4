@@ -62,10 +62,17 @@ void Epos4::stop () {
   // TODO stop
 }
 
-/* void quickStop () { */
-/*   // Send <<Quickstop>> controlword */
-/*   // Wait for QuickStopActive */
-/* } */
+void Epos4::quickStop () {
+  epos_access.lock();
+  epos_state state = epos_current_state;
+  epos_access.unlock();
+
+  if (state == OperationEnabled) {
+    can::put(epos4_messages::constructControlword(epos4_messages::QuickStop, NODE_ID));
+    block_for_epos_state(QuickStopActive);
+  }
+}
+
 /* void resume() { */
 /*   // Send <<EnableOperation>> */
 /*   // Wait for OperationEnabled */

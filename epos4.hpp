@@ -27,6 +27,8 @@ private:
 
   const uint8_t NODE_ID = 0x00; // TODO set NODE_ID
 
+  void quickStop ();
+
   // TODO ? watchdog for communication reset if no heartbeat for x
 
   /* CAN
@@ -125,6 +127,7 @@ private:
   ConditionVariable* epos_cond;
   epos_state epos_current_state = EPOS_Unknown;
 
+  // TODO remove
   void poll_epos_state () {
     can::put(epos4_messages::statusword(NODE_ID));
   }
