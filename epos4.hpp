@@ -23,6 +23,8 @@ public:
 
 private:
 
+  const uint8_t NODE_ID = 0x00; // TODO set NODE_ID
+
   // TODO ? watchdog for communication reset if no heartbeat for x
 
   /* CAN

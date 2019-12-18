@@ -63,13 +63,13 @@ namespace epos4_messages {
     EnableOperation            = 0b00001111, // 0xxx 1111
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
-  inline CANMessage constructControlword(Controlword cw) {
+  inline CANMessage constructControlword(Controlword cw, const uint8_t NODE_ID) {
     const uint8_t msgTemplate[8] = {0x2B,0x40,0x60,0x00,0x00,0x00,0x00,0x00};
 
     CANMessage msg;
 
     msg.format = CANStandard; // Standard format - 11bits
-    msg.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
+    msg.id = 0x600 + NODE_ID; // Function code (RCV SDO) + NODE_ID
     memcpy(msg.data, &msgTemplate, 8);
 
     memcpy(msg.data + 4, &cw, 1);

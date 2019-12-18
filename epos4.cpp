@@ -5,10 +5,10 @@
 
 #include "debug.hpp"
 
-CANMessage constructCANMessage (const uint8_t* raw) {
+CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
   CANMessage out;
   out.format = CANStandard; // Standard format - 11bits
-  out.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
+  out.id = 0x600 + NODE_ID; // Function code (RCV SDO) + NODE_ID
   memcpy(out.data, raw, 8);
   out.len = 8;
 
@@ -23,7 +23,7 @@ Epos4::epos_state Epos4::pollState () {
 
   CANMessage out;
   out.format = CANStandard; // Standard format - 11bits
-  out.id = 0x600 + 0;       // Function code (RCV SDO) + NODE_ID
+  out.id = 0x600 + NODE_ID; // Function code (RCV SDO) + NODE_ID
   memcpy(out.data, &epos4_messages::Statusword_Data, 4);
   out.len = 4;
   can::put(out);
@@ -70,12 +70,12 @@ void Epos4::startPosMode () {
   blockForState(SwitchOnDisabled);
 
   // Shutdown (-> ReadyToSwitchOn)
-  can::put(epos4_messages::constructControlword(epos4_messages::Shutdown));
+  can::put(epos4_messages::constructControlword(epos4_messages::Shutdown, NODE_ID));
   ThisThread::sleep_for(50);
   blockForState(ReadyToSwitchOn);
 
   // Set profile position mode (PPM)
-  can::put(constructCANMessage(epos4_messages::SetPPM_Data));
+  can::put(constructCANMessage(epos4_messages::SetPPM_Data, NODE_ID));
   ThisThread::sleep_for(50);
 
   // TODO ? Setup units
@@ -83,11 +83,11 @@ void Epos4::startPosMode () {
   // TODO ? Setup PDOs
 
   // Switch on  (-> SwitchedOn), allow high voltage
-  can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn));
+  can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn, NODE_ID));
   ThisThread::sleep_for(50);
   blockForState(SwitchedOn);
   // Enable operation (-> OperationEnabled), allow torque
-  can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation));
+  can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation, NODE_ID));
   ThisThread::sleep_for(50);
   blockForState(OperationEnabled);
 }
