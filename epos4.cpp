@@ -29,13 +29,11 @@ Epos4::Epos4 (PinName rx, PinName tx)
 }
 
 void Epos4::startPosMode () {
-  poll_epos_state();
   block_for_epos_state(SwitchOnDisabled);
 
   // Shutdown (-> ReadyToSwitchOn)
   can::put(epos4_messages::constructControlword(epos4_messages::Shutdown, NODE_ID));
   ThisThread::sleep_for(50);
-  poll_epos_state();
   block_for_epos_state(ReadyToSwitchOn);
 
   // Set profile position mode (PPM)
@@ -49,12 +47,10 @@ void Epos4::startPosMode () {
   // Switch on  (-> SwitchedOn), allow high voltage
   can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn, NODE_ID));
   ThisThread::sleep_for(50);
-  poll_epos_state();
   block_for_epos_state(SwitchedOn);
   // Enable operation (-> OperationEnabled), allow torque
   can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation, NODE_ID));
   ThisThread::sleep_for(50);
-  poll_epos_state();
   block_for_epos_state(OperationEnabled);
 }
 

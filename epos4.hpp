@@ -127,11 +127,6 @@ private:
   ConditionVariable* epos_cond;
   epos_state epos_current_state = EPOS_Unknown;
 
-  // TODO remove
-  void poll_epos_state () {
-    can::put(epos4_messages::statusword(NODE_ID));
-  }
-
   void block_for_epos_state (epos_state desired) {
     pc.printf("Waiting for EPOS state : %d\n", desired);
 
