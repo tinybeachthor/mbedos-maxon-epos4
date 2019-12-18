@@ -37,6 +37,8 @@ private:
       can::get(msg, osWaitForever);
       pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
+      // TODO : transition epos states
+
       // HEARTBEAT (read NMT state)
       if (msg.id > 0x700) {
         uint8_t node_id = msg.id - 0x700;
@@ -68,7 +70,7 @@ private:
     FaultReactionActive = 6,
     Fault               = 7,
 
-    Unknown             = 255,
+    EPOS_Unknown        = 255,
   };
 
   epos_state statuswordToState(uint16_t statusword) {
@@ -96,8 +98,24 @@ private:
     return Unknown;
   }
 
-  epos_state pollState ();
-  void blockForState (epos_state desired);
+  Mutex epos_access;
+  ConditionVariable* epos_cond;
+  epos_state epos_current_state;
+
+  epos_state pollState () {}
+
+  void block_for_epos_state (epos_state desired) {
+    pc.printf("Waiting for EPOS state : %d\n", desired);
+
+    epos_access.lock();
+    while (epos_current_state != desired_state) {
+      epos_cond->wait();
+      pc.printf("Received EPOS state : %d\n", epos_current_state);
+    }
+    epos_access.unlock();
+
+    pc.printf("Attained EPOS state : %d\n", desired);
+  }
 
   /* NMT state (HEARTBEAT COB-ID:0x700)
 

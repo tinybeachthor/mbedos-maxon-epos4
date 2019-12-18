@@ -17,8 +17,6 @@ CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
 
 Epos4::epos_state Epos4::pollState () {
 
-  // TODO : transition to states
-
   // TODO : sync state reading + block for update here
 
   CANMessage out;
@@ -36,22 +34,12 @@ Epos4::epos_state Epos4::pollState () {
   return statuswordToState(data);
 }
 
-void Epos4::blockForState (Epos4::epos_state desired) {
-  pc.printf("Waiting for state : %d\n", desired);
-  epos_state state = Unknown;
-  do {
-    state = pollState();
-    pc.printf("Received state : %d\n", state);
-  }
-  while (state != desired);
-
-  pc.printf("State attained : %d\n", desired);
-}
-
 Epos4::Epos4 (PinName rx, PinName tx)
   : nmt_current_state(NMT_Unknown)
+  , epos_current_state(EPOS_Unknown)
 {
   nmt_cond = new ConditionVariable(nmt_access);
+  epos_cond = new ConditionVariable(epos_access);
 
   can::init(rx, tx, 500000);
   can_listener.start(callback(this, &Epos4::can_handler_routine));
