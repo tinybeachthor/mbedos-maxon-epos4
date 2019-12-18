@@ -51,7 +51,17 @@ namespace epos4_messages {
   // UINT8 [ PPM = 0x01 ]
   const uint8_t SetPPM_Data[8] = {0x2F,0x60,0x60,0x00,0x01,0x00,0x00,0x00};
 
-  const uint8_t Statusword_Data[4]  = {0x40,0x41,0x60,0x00};
+  inline CANMessage statusword (const uint8_t NODE_ID) {
+    const uint8_t msgTemplate[4]  = {0x40,0x41,0x60,0x00};
+
+    CANMessage msg;
+    msg.format = CANStandard; // Standard format - 11bits
+    msg.id = 0x600 + NODE_ID; // Function code (RCV SDO) + NODE_ID
+    memcpy(msg.data, &msgTemplate, 4);
+    msg.len = 4;
+
+    return msg;
+  }
 
   enum Controlword : uint16_t {
     Shutdown                   = 0b00000110, // 0xxx x110

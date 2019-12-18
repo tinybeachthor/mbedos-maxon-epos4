@@ -3,6 +3,8 @@
 #include "mbed.h"
 
 #include "can.hpp"
+#include "nmt_messages.hpp"
+#include "epos4_messages.hpp"
 
 #include "debug.hpp"
 
@@ -38,6 +40,9 @@ private:
       pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
       // TODO : transition epos states
+  /* uint16_t data; */
+  /* memcpy(&data, in.data, in.len); */
+  /* return statuswordToState(data); */
 
       // HEARTBEAT (read NMT state)
       if (msg.id > 0x700) {
@@ -95,20 +100,22 @@ private:
     else if (lowByte == 0b00001000)
       return Fault;
 
-    return Unknown;
+    return EPOS_Unknown;
   }
 
   Mutex epos_access;
   ConditionVariable* epos_cond;
-  epos_state epos_current_state;
+  epos_state epos_current_state = EPOS_Unknown;
 
-  epos_state pollState () {}
+  void poll_epos_state () {
+    can::put(epos4_messages::statusword(NODE_ID));
+  }
 
   void block_for_epos_state (epos_state desired) {
     pc.printf("Waiting for EPOS state : %d\n", desired);
 
     epos_access.lock();
-    while (epos_current_state != desired_state) {
+    while (epos_current_state != desired) {
       epos_cond->wait();
       pc.printf("Received EPOS state : %d\n", epos_current_state);
     }
@@ -149,7 +156,7 @@ private:
 
   Mutex nmt_access;
   ConditionVariable* nmt_cond;
-  nmt_state nmt_current_state;
+  nmt_state nmt_current_state = NMT_Unknown;
 
   void block_for_nmt_state(nmt_state desired_state) {
     nmt_access.lock();

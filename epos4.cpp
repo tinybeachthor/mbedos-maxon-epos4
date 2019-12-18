@@ -1,10 +1,5 @@
 #include "epos4.hpp"
 
-#include "nmt_messages.hpp"
-#include "epos4_messages.hpp"
-
-#include "debug.hpp"
-
 CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
   CANMessage out;
   out.format = CANStandard; // Standard format - 11bits
@@ -15,28 +10,7 @@ CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
   return out;
 }
 
-Epos4::epos_state Epos4::pollState () {
-
-  // TODO : sync state reading + block for update here
-
-  CANMessage out;
-  out.format = CANStandard; // Standard format - 11bits
-  out.id = 0x600 + NODE_ID; // Function code (RCV SDO) + NODE_ID
-  memcpy(out.data, &epos4_messages::Statusword_Data, 4);
-  out.len = 4;
-  can::put(out);
-
-  CANMessage in;
-  can::get(in, osWaitForever);
-
-  uint16_t data;
-  memcpy(&data, in.data, in.len);
-  return statuswordToState(data);
-}
-
 Epos4::Epos4 (PinName rx, PinName tx)
-  : nmt_current_state(NMT_Unknown)
-  , epos_current_state(EPOS_Unknown)
 {
   nmt_cond = new ConditionVariable(nmt_access);
   epos_cond = new ConditionVariable(epos_access);
@@ -55,12 +29,14 @@ Epos4::Epos4 (PinName rx, PinName tx)
 }
 
 void Epos4::startPosMode () {
-  blockForState(SwitchOnDisabled);
+  poll_epos_state();
+  block_for_epos_state(SwitchOnDisabled);
 
   // Shutdown (-> ReadyToSwitchOn)
   can::put(epos4_messages::constructControlword(epos4_messages::Shutdown, NODE_ID));
   ThisThread::sleep_for(50);
-  blockForState(ReadyToSwitchOn);
+  poll_epos_state();
+  block_for_epos_state(ReadyToSwitchOn);
 
   // Set profile position mode (PPM)
   can::put(constructCANMessage(epos4_messages::SetPPM_Data, NODE_ID));
@@ -73,11 +49,13 @@ void Epos4::startPosMode () {
   // Switch on  (-> SwitchedOn), allow high voltage
   can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn, NODE_ID));
   ThisThread::sleep_for(50);
-  blockForState(SwitchedOn);
+  poll_epos_state();
+  block_for_epos_state(SwitchedOn);
   // Enable operation (-> OperationEnabled), allow torque
   can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation, NODE_ID));
   ThisThread::sleep_for(50);
-  blockForState(OperationEnabled);
+  poll_epos_state();
+  block_for_epos_state(OperationEnabled);
 }
 
 void Epos4::stop () {
