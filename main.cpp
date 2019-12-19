@@ -15,13 +15,11 @@ int main() {
   PinName can_rx = PD_0;
   PinName can_tx = PD_1;
 
-  led_status = true;
-
   Epos4 mc(can_rx, can_tx);
   pc.printf("Setup complete!\n");
   wait_us(1000 * 1000);
 
-  led_status = false;
+  led_status = true;
 
   pc.printf("Turning motorcontroller on\n");
   mc.startPosMode();
@@ -32,6 +30,8 @@ int main() {
   mc.stop();
   wait_us(1000 * 1000);
   pc.printf("Motorcontroller off\n");
+
+  led_status = false;
 
   while (true) {
     led_power = !led_power;
