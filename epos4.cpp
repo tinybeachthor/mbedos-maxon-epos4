@@ -12,10 +12,29 @@ CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
 
 Epos4::Epos4 (PinName rx, PinName tx)
 {
+  DigitalOut led_send(LED3);
+
   nmt_cond = new ConditionVariable(nmt_access);
   epos_cond = new ConditionVariable(epos_access);
 
-  can::init(rx, tx, 500000);
+  steering_can::init(rx, tx, 500000);
+
+  CANMessage msg = epos4_messages::constructControlword(epos4_messages::Controlword::Shutdown, 1);
+
+  led_send = false;
+  steering_can::put(msg);
+  wait_us(1000 * 1000);
+  led_send = true;
+  // steering_can::put(option2);
+  // wait_us(1000 * 1000);
+  // led_send = false;
+  // steering_can::put(option3);
+  // wait_us(1000 * 1000);
+  // led_send = true;
+  // steering_can::put(option4);
+  // wait_us(1000 * 1000);
+  // led_send = false;
+
   can_listener.start(callback(this, &Epos4::can_handler_routine));
 
   // Wait for first HEARTBEAT message to arrive
@@ -23,7 +42,7 @@ Epos4::Epos4 (PinName rx, PinName tx)
   pc.printf("Got to NMT PreOperational\n");
 
   // Go to NMT Operational
-  can::put(nmt_messages::construct(nmt_messages::Operational));
+  steering_can::put(nmt_messages::construct(nmt_messages::Operational));
   block_for_nmt_state(nmt_state::Operational);
   pc.printf("Got to NMT Operational\n");
 }
@@ -32,12 +51,12 @@ void Epos4::startPosMode () {
   block_for_epos_state(SwitchOnDisabled);
 
   // Shutdown (-> ReadyToSwitchOn)
-  can::put(epos4_messages::constructControlword(epos4_messages::Shutdown, NODE_ID));
+  steering_can::put(epos4_messages::constructControlword(epos4_messages::Shutdown, NODE_ID));
   ThisThread::sleep_for(50);
   block_for_epos_state(ReadyToSwitchOn);
 
   // Set profile position mode (PPM)
-  can::put(constructCANMessage(epos4_messages::SetPPM_Data, NODE_ID));
+  steering_can::put(constructCANMessage(epos4_messages::SetPPM_Data, NODE_ID));
   ThisThread::sleep_for(50);
 
   // TODO ? Setup units
@@ -45,11 +64,11 @@ void Epos4::startPosMode () {
   // TODO ? Setup PDOs
 
   // Switch on  (-> SwitchedOn), allow high voltage
-  can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn, NODE_ID));
+  steering_can::put(epos4_messages::constructControlword(epos4_messages::SwitchOn, NODE_ID));
   ThisThread::sleep_for(50);
   block_for_epos_state(SwitchedOn);
   // Enable operation (-> OperationEnabled), allow torque
-  can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation, NODE_ID));
+  steering_can::put(epos4_messages::constructControlword(epos4_messages::EnableOperation, NODE_ID));
   ThisThread::sleep_for(50);
   block_for_epos_state(OperationEnabled);
 }
@@ -62,7 +81,7 @@ void Epos4::stop () {
   epos_access.unlock();
 
   if (state == QuickStopActive) {
-    can::put(epos4_messages::constructControlword(epos4_messages::DisableVoltage, NODE_ID));
+    steering_can::put(epos4_messages::constructControlword(epos4_messages::DisableVoltage, NODE_ID));
     block_for_epos_state(SwitchOnDisabled);
   }
 }
@@ -73,7 +92,7 @@ void Epos4::quickStop () {
   epos_access.unlock();
 
   if (state == OperationEnabled) {
-    can::put(epos4_messages::constructControlword(epos4_messages::QuickStop, NODE_ID));
+    steering_can::put(epos4_messages::constructControlword(epos4_messages::QuickStop, NODE_ID));
     block_for_epos_state(QuickStopActive);
   }
 }

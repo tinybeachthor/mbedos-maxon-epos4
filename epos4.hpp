@@ -2,7 +2,7 @@
 
 #include "mbed.h"
 
-#include "can.hpp"
+#include "steering_can.hpp"
 #include "nmt_messages.hpp"
 #include "epos4_messages.hpp"
 
@@ -38,7 +38,7 @@ private:
     // wait for + handle CAN messages
     while (true) {
       CANMessage msg;
-      can::get(msg, osWaitForever);
+      steering_can::get(msg, osWaitForever);
       pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
       // TRANSMIT SDO (data from slave)

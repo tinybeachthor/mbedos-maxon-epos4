@@ -8,7 +8,9 @@
 
 int main() {
   DigitalOut led_power(LED1);
+  DigitalOut led_status(LED2);
   led_power = true;
+  led_status = true;
 
   pc.printf("Starting up...\n");
 
@@ -19,7 +21,7 @@ int main() {
   pc.printf("Setup complete!\n");
   wait_us(1000 * 1000);
 
-  led_status = true;
+  led_status = false;
 
   pc.printf("Turning motorcontroller on\n");
   mc.startPosMode();
@@ -31,7 +33,7 @@ int main() {
   wait_us(1000 * 1000);
   pc.printf("Motorcontroller off\n");
 
-  led_status = false;
+  //led_status = false;
 
   while (true) {
     led_power = !led_power;

@@ -2,7 +2,7 @@
 
 #include "mbed.h"
 
-namespace can
+namespace steering_can
 {
   extern void init (PinName rx, PinName tx, uint32_t baudrate);
 

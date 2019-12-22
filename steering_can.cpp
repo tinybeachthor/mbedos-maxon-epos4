@@ -2,7 +2,7 @@
 #error CAN NOT SUPPORTED
 #endif
 
-#include "can.hpp"
+#include "steering_can.hpp"
 
 #include <queue>
 
@@ -21,8 +21,7 @@ class InterruptableCAN : public mbed::CAN {
   void unlock() override {};
 };
 
-namespace can {
-
+namespace steering_can {
   constexpr long unsigned int SIZE = 30;
   rtos::Mail<CANMessage, SIZE> rx_buffer;
 
