@@ -43,7 +43,7 @@ private:
 
       // HEARTBEAT (read NMT state)
       if (msg.id > 0x700) {
-        uint8_t node_id = msg.id - 0x700;
+        uint16_t node_id = msg.id - 0x700;
         uint8_t state = *((uint8_t*)msg.data);
         pc.printf("Got HEARTBEAT from node#%d NMT state : %X\n", node_id, state);
 
@@ -54,7 +54,7 @@ private:
       }
       // TRANSMIT SDO (data from slave)
       else if (msg.id > 0x580) {
-        uint8_t node_id = msg.id - 0x580;
+        uint16_t node_id = msg.id - 0x580;
         uint16_t index;
         pc.printf("Got node id : %d\n", node_id);
         memcpy(&index, msg.data + 1, 2);
