@@ -41,8 +41,19 @@ private:
       steering_can::get(msg, osWaitForever);
       pc.printf("Got CAN message : COB-ID=0x%X\n", msg.id);
 
+      // HEARTBEAT (read NMT state)
+      if (msg.id > 0x700) {
+        uint8_t node_id = msg.id - 0x700;
+        uint8_t state = *((uint8_t*)msg.data);
+        pc.printf("Got HEARTBEAT from node#%d NMT state : %X\n", node_id, state);
+
+        nmt_access.lock();
+        nmt_current_state = to_nmt_state(state);
+        nmt_cond->notify_all();
+        nmt_access.unlock();
+      }
       // TRANSMIT SDO (data from slave)
-      if (msg.id > 0x580) {
+      else if (msg.id > 0x580) {
         uint8_t node_id = msg.id - 0x580;
         uint16_t index;
         pc.printf("Got node id : %d\n", node_id);
@@ -65,17 +76,6 @@ private:
           }
           break;
         }
-      }
-      // HEARTBEAT (read NMT state)
-      else if (msg.id > 0x700) {
-        uint8_t node_id = msg.id - 0x700;
-        uint8_t state = *((uint8_t*)msg.data);
-        pc.printf("Got HEARTBEAT from node#%d NMT state : %X\n", node_id, state);
-
-        nmt_access.lock();
-        nmt_current_state = to_nmt_state(state);
-        nmt_cond->notify_all();
-        nmt_access.unlock();
       }
     }
   }
