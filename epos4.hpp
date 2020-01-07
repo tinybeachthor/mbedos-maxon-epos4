@@ -25,7 +25,7 @@ public:
 
 private:
 
-  const uint8_t NODE_ID = 0x00; // TODO set NODE_ID
+  const uint8_t NODE_ID = 0x01; // TODO set NODE_ID
 
   void quickStop ();
 
@@ -45,7 +45,9 @@ private:
       if (msg.id > 0x580) {
         uint8_t node_id = msg.id - 0x580;
         uint16_t index;
+        pc.printf("Got node id : %d\n", node_id);
         memcpy(&index, msg.data + 1, 2);
+        pc.printf("Got code index : 0x%X\n", index);
 
         switch (index) {
           // STATUSWORD
