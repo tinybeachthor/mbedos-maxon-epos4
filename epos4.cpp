@@ -12,8 +12,6 @@ CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
 
 Epos4::Epos4 (PinName rx, PinName tx)
 {
-  DigitalOut led_send(LED3);
-
   nmt_cond = new ConditionVariable(nmt_access);
   epos_cond = new ConditionVariable(epos_access);
 
@@ -21,19 +19,8 @@ Epos4::Epos4 (PinName rx, PinName tx)
 
   CANMessage msg = epos4_messages::constructControlword(epos4_messages::Controlword::Shutdown, 1);
 
-  led_send = false;
   steering_can::put(msg);
   wait_us(1000 * 1000);
-  led_send = true;
-  // steering_can::put(option2);
-  // wait_us(1000 * 1000);
-  // led_send = false;
-  // steering_can::put(option3);
-  // wait_us(1000 * 1000);
-  // led_send = true;
-  // steering_can::put(option4);
-  // wait_us(1000 * 1000);
-  // led_send = false;
 
   can_listener.start(callback(this, &Epos4::can_handler_routine));
 
