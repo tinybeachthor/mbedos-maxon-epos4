@@ -17,11 +17,6 @@ Epos4::Epos4 (PinName rx, PinName tx)
 
   steering_can::init(rx, tx, 1000000);
 
-  CANMessage msg = epos4_messages::constructControlword(epos4_messages::Controlword::Shutdown, 1);
-
-  steering_can::put(msg);
-  wait_us(1000 * 1000);
-
   can_listener.start(callback(this, &Epos4::can_handler_routine));
 
   // Wait for first HEARTBEAT message to arrive
