@@ -132,6 +132,8 @@ private:
   void block_for_epos_state (epos_state desired) {
     pc.printf("Waiting for EPOS state : %d\n", desired);
 
+    steering_can::put(statusword(NODE_ID));
+
     epos_access.lock();
     while (epos_current_state != desired) {
       epos_cond->wait();
