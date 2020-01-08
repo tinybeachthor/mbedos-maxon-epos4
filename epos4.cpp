@@ -15,12 +15,7 @@ Epos4::Epos4 (PinName rx, PinName tx)
   nmt_cond = new ConditionVariable(nmt_access);
   epos_cond = new ConditionVariable(epos_access);
 
-  steering_can::init(rx, tx, 1000 * 1000);
-
-  CANMessage msg = epos4_messages::constructControlword(epos4_messages::Controlword::Shutdown, 1);
-
-  steering_can::put(msg);
-  wait_us(1000 * 1000);
+  steering_can::init(rx, tx, 1000000);
 
   can_listener.start(callback(this, &Epos4::can_handler_routine));
 

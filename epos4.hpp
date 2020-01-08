@@ -53,7 +53,7 @@ private:
         nmt_access.unlock();
       }
       // TRANSMIT SDO (data from slave)
-      else if (msg.id > 0x580) {
+      else if (msg.id > 0x580 && msg.id < 0x600) {
         uint16_t node_id = msg.id - 0x580;
         uint16_t index;
         pc.printf("Got node id : %d\n", node_id);
