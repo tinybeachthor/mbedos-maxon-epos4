@@ -49,7 +49,7 @@ namespace epos4_messages {
 
   // 0x6060 Modes of operation
   // UINT8 [ PPM = 0x01 ]
-  const uint8_t SetPPM_Data[8] = {0x2F,0x60,0x60,0x00,0x01,0x00,0x00,0x00};
+  const uint8_t SetPPM_Data[8] = {0x2F,0x60,0x60,0x00,0x01,0x00,0x00,0x00}  ;
 
   inline CANMessage statusword (const uint8_t NODE_ID) {
     const uint8_t msgTemplate[4]  = {0x40,0x41,0x60,0x00};
@@ -71,6 +71,7 @@ namespace epos4_messages {
     QuickStop                  = 0b00000010, // 0xxx x01x
     DisableOperation           = 0b00000111, // 0xxx 0111
     EnableOperation            = 0b00001111, // 0xxx 1111
+    ConfirmSetpoint            = 0b01111011, //
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
   inline CANMessage constructControlword(Controlword cw, const uint8_t NODE_ID) {
@@ -84,6 +85,19 @@ namespace epos4_messages {
 
     memcpy(msg.data + 4, &cw, 1);
 
+    msg.len = 8;
+
+    return msg;
+  }
+
+  inline CANMessage constructTargetPos(float angle, const uint8_t NODE_ID) {
+    uint8_t numerator = (int) (angle * 100);
+    const uint8_t msgTemplate[8] = {0x2F, 0x7A, 0x60, 0x00, 0x00, 0x64, 0x01, 0x00};
+
+    CANMessage msg;
+    msg.format = CANStandard;
+    msg.id = 0x600 + NODE_ID;
+    memcpy(msg.data, &msgTemplate, 8);
     msg.len = 8;
 
     return msg;

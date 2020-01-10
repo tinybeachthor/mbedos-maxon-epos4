@@ -21,13 +21,17 @@ public:
   Epos4 (PinName rx, PinName tx);
 
   void startPosMode ();
+  void moveToAngle (float angle);
   void stop ();
+  void startVelMode ();
+
 
 private:
 
   const uint8_t NODE_ID = 0x01; // TODO set NODE_ID
 
   void quickStop ();
+  void goToReadyState ();
 
   // TODO ? watchdog for communication reset if no heartbeat for x
 
