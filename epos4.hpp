@@ -23,7 +23,6 @@ public:
   void startPosMode ();
   void moveToAngle (float angle);
   void stop ();
-  void startVelMode ();
 
 
 private:

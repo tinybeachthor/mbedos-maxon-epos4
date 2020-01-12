@@ -71,7 +71,7 @@ namespace epos4_messages {
     QuickStop                  = 0b00000010, // 0xxx x01x
     DisableOperation           = 0b00000111, // 0xxx 0111
     EnableOperation            = 0b00001111, // 0xxx 1111
-    ConfirmSetpoint            = 0b01111011, //
+    ConfirmSetpoint            = 0b00111111, //
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
   inline CANMessage constructControlword(Controlword cw, const uint8_t NODE_ID) {
@@ -92,7 +92,7 @@ namespace epos4_messages {
 
   inline CANMessage constructTargetPos(float angle, const uint8_t NODE_ID) {
     uint8_t numerator = (int) (angle * 100);
-    const uint8_t msgTemplate[8] = {0x2F, 0x7A, 0x60, 0x00, 0x00, 0x64, 0x01, 0x00};
+    const uint8_t msgTemplate[8] = {0x23, 0x7A, 0x60, 0x00, 0xE8, 0x03, 0x00, 0x00};
 
     CANMessage msg;
     msg.format = CANStandard;

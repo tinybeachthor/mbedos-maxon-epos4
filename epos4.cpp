@@ -45,8 +45,6 @@ void Epos4::startPosMode () {
   steering_can::put(constructCANMessage(epos4_messages::SetPPM_Data, NODE_ID));
   ThisThread::sleep_for(50);
 
-  // TODO ? Setup units
-
   // TODO ? Setup PDOs
 
   // Switch on  (-> SwitchedOn), allow high voltage
@@ -59,13 +57,6 @@ void Epos4::startPosMode () {
   block_for_epos_state(OperationEnabled);
 }
 
-void Epos4::startVelMode () {
-  goToReadyState();
-
-  // Set profile velocity mode (PVM)
-
-}
-
 void Epos4::moveToAngle (float angle) {
   block_for_epos_state(OperationEnabled);
 
@@ -74,8 +65,8 @@ void Epos4::moveToAngle (float angle) {
   steering_can::put(epos4_messages::constructTargetPos(angle, NODE_ID));
   ThisThread::sleep_for(50);
 
-  // steering_can::put(epos4_messages::constructControlword(epos4_messages::ConfirmSetpoint, NODE_ID));
-  // ThisThread::sleep_for(50);
+  steering_can::put(epos4_messages::constructControlword(epos4_messages::ConfirmSetpoint, NODE_ID));
+  ThisThread::sleep_for(50);
 }
 
 void Epos4::stop () {
