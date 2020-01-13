@@ -1,5 +1,7 @@
 ------------------------------- MODULE epos4 -------------------------------
 
+CONSTANT UNKNOWN
+
 \* NMT states
 CONSTANT NMT_Booting, NMT_PreOperational, NMT_Operational, NMT_Stopped
 
@@ -11,8 +13,8 @@ CONSTANT EPOS_NotReadyToSwitchOn, EPOS_SwitchOnDisabled, EPOS_ReadyToSwitchOn,
     EPOS_FaultReactionActive, EPOS_Fault
 
 EPOS == {EPOS_NotReadyToSwitchOn, EPOS_SwitchOnDisabled,
-  EPOS_ReadyToSwitchOn, EPOS_SwitchedOn, EPOS_OperationEnabled,
-  EPOS_QuickStopActive, EPOS_FaultReactionActive, EPOS_Fault}
+         EPOS_ReadyToSwitchOn, EPOS_SwitchedOn, EPOS_OperationEnabled,
+         EPOS_QuickStopActive, EPOS_FaultReactionActive, EPOS_Fault}
 
 -----
 
@@ -20,8 +22,8 @@ VARIABLES nmt_state, epos_state
 
 -----
 
-TypeOK == /\ nmt_state \in NMT
-          /\ epos_state \in EPOS
+TypeOK == /\ nmt_state \in (NMT \cup UNKNOWN)
+          /\ epos_state \in (EPOS \cup UNKNOWN)
 
 -----
 
@@ -38,5 +40,5 @@ Next == \/ Recv_BootUp
 
 =============================================================================
 \* Modification History
-\* Last modified Mon Jan 13 13:50:35 CET 2020 by martin
+\* Last modified Mon Jan 13 14:00:02 CET 2020 by martin
 \* Created Mon Jan 13 12:39:13 CET 2020 by martin
