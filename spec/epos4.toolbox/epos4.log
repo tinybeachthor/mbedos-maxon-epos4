@@ -1,0 +1,204 @@
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=pdflatex 2019.12.10)  13 JAN 2020 13:34
+entering extended mode
+**epos4.tex
+(./epos4.tex
+LaTeX2e <2003/12/01>
+Babel <v3.8d> and hyphenation patterns for american, french, german, ngerman, b
+ahasa, basque, bulgarian, catalan, croatian, czech, danish, dutch, esperanto, e
+stonian, finnish, greek, icelandic, irish, italian, latin, magyar, norsk, polis
+h, portuges, romanian, russian, serbian, slovak, slovene, spanish, swedish, tur
+kish, ukrainian, nohyphenation, loaded.
+
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/base/article.cls
+Document Class: article 2004/02/16 v1.4f Standard LaTeX document class
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/base/size10.clo
+File: size10.clo 2004/02/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/graphics/color.sty
+Package: color 1999/02/16 v1.0i Standard LaTeX Color (DPC)
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/graphics/color.cfg
+File: color.cfg 2005/02/03 v1.3 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 125.
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/graphics/pdftex.def
+File: pdftex.def 2002/06/19 v0.03k graphics/color for pdftex
+\Gread@gobject=\count87
+))
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
+)
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\symlength=\skip43
+\equalswidth=\skip44
+\charwidth=\skip45
+\boxrulewd=\skip46
+\boxlineht=\skip47
+\boxruleht=\skip48
+\boxruledp=\skip49
+\pcalvspace=\skip50
+\lcomindent=\skip51
+\@xlen=\skip52
+\templena=\skip53
+\templenb=\skip54
+\tempboxa=\box26
+\vshadelen=\skip55
+\boxwidth=\skip56
+\multicommentdepth=\skip57
+\c@pardepth=\count88
+\tempsbox=\box27
+\@cparht=\skip58
+\@cpardp=\skip59
+\xmcomlen=\skip60
+\spacewidth=\skip61
+\alignboxwidth=\skip62
+\alignwidth=\skip63
+\alignbox=\box28
+\symtlaitalics=\mathgroup5
+\c@tlx@ctr=\count89
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks14
+\verbatim@line=\toks15
+\verbatim@in@stream=\read1
+) (./epos4.aux)
+\openout1 = `epos4.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 939.
+LaTeX Font Info:    ... okay on input line 939.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 939.
+LaTeX Font Info:    ... okay on input line 939.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 939.
+LaTeX Font Info:    ... okay on input line 939.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 939.
+LaTeX Font Info:    ... okay on input line 939.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 939.
+LaTeX Font Info:    ... okay on input line 939.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 939.
+LaTeX Font Info:    ... okay on input line 939.
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/con
+text/base/supp-pdf.tex
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/con
+text/base/supp-mis.tex
+loading : Context Support Macros / Miscellaneous (2004.10.26)
+\protectiondepth=\count90
+\scratchcounter=\count91
+\scratchtoks=\toks16
+\scratchdimen=\dimen103
+\scratchskip=\skip64
+\scratchmuskip=\muskip10
+\scratchbox=\box29
+\scratchread=\read2
+\scratchwrite=\write3
+\zeropoint=\dimen104
+\onepoint=\dimen105
+\onebasepoint=\dimen106
+\minusone=\count92
+\thousandpoint=\dimen107
+\onerealpoint=\dimen108
+\emptytoks=\toks17
+\nextbox=\box30
+\nextdepth=\dimen109
+\everyline=\toks18
+\!!counta=\count93
+\!!countb=\count94
+\recursecounter=\count95
+)
+loading : Context Support Macros / PDF (2004.03.26)
+\nofMPsegments=\count96
+\nofMParguments=\count97
+\MPscratchCnt=\count98
+\MPscratchDim=\dimen110
+\MPnumerator=\count99
+\everyMPtoPDFconversion=\toks19
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 942.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 942.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 942.
+
+(/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/tex/lat
+ex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 947.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 947.
+
+Overfull \hbox (12.39883pt too wide) in paragraph at lines 950--951
+[][] 
+ []
+
+
+Overfull \hbox (15.99594pt too wide) in paragraph at lines 953--954
+[][] 
+ []
+
+
+Overfull \hbox (60.63991pt too wide) in paragraph at lines 961--963
+[][] 
+ []
+
+[1
+
+{/nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-var/fonts/ma
+p/pdftex/updmap/pdftex.map}] (./epos4.aux) ) 
+Here is how much of TeX's memory you used:
+ 1066 strings out of 94500
+ 13179 string characters out of 1167963
+ 65002 words of memory out of 1000000
+ 4274 multiletter control sequences out of 10000+50000
+ 8505 words of font info for 33 fonts, out of 500000 for 2000
+ 580 hyphenation exceptions out of 1000
+ 23i,10n,25p,221b,239s stack positions out of 1500i,500n,5000p,200000b,5000s
+PDF statistics:
+ 34 PDF objects out of 300000
+ 0 named destinations out of 131072
+ 1 words of extra memory for PDF output out of 65536
+</nix/store/6mg48a2z1r1vx1pcdng1a6c
+px73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmsy8.pfb></nix/sto
+re/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/blue
+sky/cm/cmsy7.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/t
+exmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6c
+px73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmr5.pfb></nix/stor
+e/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/blues
+ky/cm/cmmi10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/t
+exmf-dist/fonts/type1/bluesky/cm/cmr8.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx
+73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmti8.pfb></nix/store
+/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesk
+y/cm/cmr10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/tex
+mf-dist/fonts/type1/bluesky/cm/cmti10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx
+73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmcsc10.pfb>
+Output written on epos4.pdf (1 page, 46787 bytes).
