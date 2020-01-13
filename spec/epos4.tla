@@ -26,9 +26,32 @@ NMT_Transition_Confirmed == /\ nmt_state /= nmt_requested
                             /\ nmt_state' = nmt_requested
                             /\ UNCHANGED nmt_requested
 
-Go_NMT_Operational == /\ nmt_state = NMT_Booting
+NMT_EnterPreOperational == /\ \/ nmt_state = NMT_Operational
+                              \/ nmt_state = NMT_Stopped
+                           /\ nmt_requested = nmt_state
+                           /\ nmt_requested' = NMT_PreOperational
+
+NMT_ResetCommunication == /\ \/ nmt_state = NMT_Operational
+                             \/ nmt_state = NMT_PreOperational
+                             \/ nmt_state = NMT_Stopped
+                          /\ nmt_requested = nmt_state
+                          /\ nmt_requested' = NMT_Booting
+
+NMT_ResetNode == /\ \/ nmt_state = NMT_Operational
+                    \/ nmt_state = NMT_PreOperational
+                    \/ nmt_state = NMT_Stopped
+                 /\ nmt_requested = nmt_state
+                 /\ nmt_requested' = NMT_Booting
+
+NMT_StartRemoteNode == /\ \/ nmt_state = NMT_PreOperational
+                          \/ nmt_state = NMT_Stopped
+                       /\ nmt_requested = nmt_state
+                       /\ nmt_requested' = NMT_Operational
+
+NMT_StopRemoteNode == /\ \/ nmt_state = NMT_Operational
+                         \/ nmt_state = NMT_PreOperational
                       /\ nmt_requested = nmt_state
-                      /\ nmt_requested' = NMT_Operational
+                      /\ nmt_requested' = NMT_Stopped
 
 -----
 
@@ -37,7 +60,11 @@ Init == /\ nmt_state = UNKNOWN
 
 Next == \/ Recv_BootUp
         \/ NMT_Transition_Confirmed
-        \/ Go_NMT_Operational
+        \/ NMT_EnterPreOperational
+        \/ NMT_ResetCommunication
+        \/ NMT_ResetNode
+        \/ NMT_StartRemoteNode
+        \/ NMT_StopRemoteNode
 
 Live == /\ \A s \in NMT :
               (nmt_requested = s) ~> (nmt_state = s)
