@@ -7,38 +7,42 @@ CONSTANT NMT_Booting, NMT_PreOperational, NMT_Operational, NMT_Stopped
 
 NMT == {NMT_Booting, NMT_PreOperational, NMT_Operational, NMT_Stopped}
 
-\* EPOS states
-CONSTANT EPOS_NotReadyToSwitchOn, EPOS_SwitchOnDisabled, EPOS_ReadyToSwitchOn,
-    EPOS_SwitchedOn, EPOS_OperationEnabled, EPOS_QuickStopActive,
-    EPOS_FaultReactionActive, EPOS_Fault
-
-EPOS == {EPOS_NotReadyToSwitchOn, EPOS_SwitchOnDisabled,
-         EPOS_ReadyToSwitchOn, EPOS_SwitchedOn, EPOS_OperationEnabled,
-         EPOS_QuickStopActive, EPOS_FaultReactionActive, EPOS_Fault}
-
 -----
 
-VARIABLES nmt_state, epos_state
+VARIABLES nmt_state
+VARIABLES nmt_requested
 
 -----
 
 TypeOK == /\ nmt_state \in (NMT \cup UNKNOWN)
-          /\ epos_state \in (EPOS \cup UNKNOWN)
 
 -----
 
 Recv_BootUp == /\ nmt_state = NMT_Booting
                /\ nmt_state' = NMT_PreOperational
-               /\ UNCHANGED epos_state
+               /\ UNCHANGED nmt_requested
+
+NMT_Transition_Confirmed == /\ nmt_state /= nmt_requested
+                            /\ nmt_state' = nmt_requested
+                            /\ UNCHANGED nmt_requested
+
+Go_NMT_Operational == /\ nmt_state = NMT_Booting
+                      /\ nmt_requested = nmt_state
+                      /\ nmt_requested' = NMT_Operational
 
 -----
 
-Init == /\ nmt_state = NMT_Booting
-        /\ epos_state = EPOS_NotReadyToSwitchOn
+Init == /\ nmt_state = UNKNOWN
+        /\ nmt_requested = NMT_Booting
 
 Next == \/ Recv_BootUp
+        \/ NMT_Transition_Confirmed
+        \/ Go_NMT_Operational
+
+Live == /\ \A s \in NMT :
+              (nmt_requested = s) ~> (nmt_state = s)
 
 =============================================================================
 \* Modification History
-\* Last modified Mon Jan 13 14:00:02 CET 2020 by martin
+\* Last modified Mon Jan 13 14:35:03 CET 2020 by martin
 \* Created Mon Jan 13 12:39:13 CET 2020 by martin

@@ -1,4 +1,4 @@
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=pdflatex 2019.12.10)  13 JAN 2020 13:34
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=pdflatex 2019.12.10)  13 JAN 2020 14:22
 entering extended mode
 **epos4.tex
 (./epos4.tex
@@ -153,21 +153,26 @@ ex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 947.
+(Font)              <8> on input line 949.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 947.
+(Font)              <6> on input line 949.
 
-Overfull \hbox (12.39883pt too wide) in paragraph at lines 950--951
+Overfull \hbox (12.39883pt too wide) in paragraph at lines 952--953
 [][] 
  []
 
 
-Overfull \hbox (15.99594pt too wide) in paragraph at lines 953--954
+Overfull \hbox (15.99594pt too wide) in paragraph at lines 955--956
 [][] 
  []
 
 
-Overfull \hbox (60.63991pt too wide) in paragraph at lines 961--963
+Overfull \hbox (60.63991pt too wide) in paragraph at lines 963--965
+[][] 
+ []
+
+
+Overfull \hbox (17.13602pt too wide) in paragraph at lines 971--973
 [][] 
  []
 
@@ -178,27 +183,29 @@ p/pdftex/updmap/pdftex.map}] (./epos4.aux) )
 Here is how much of TeX's memory you used:
  1066 strings out of 94500
  13179 string characters out of 1167963
- 65002 words of memory out of 1000000
+ 67002 words of memory out of 1000000
  4274 multiletter control sequences out of 10000+50000
  8505 words of font info for 33 fonts, out of 500000 for 2000
  580 hyphenation exceptions out of 1000
  23i,10n,25p,221b,239s stack positions out of 1500i,500n,5000p,200000b,5000s
 PDF statistics:
- 34 PDF objects out of 300000
+ 37 PDF objects out of 300000
  0 named destinations out of 131072
  1 words of extra memory for PDF output out of 65536
 </nix/store/6mg48a2z1r1vx1pcdng1a6c
 px73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmsy8.pfb></nix/sto
 re/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/blue
-sky/cm/cmsy7.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/t
-exmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6c
-px73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmr5.pfb></nix/stor
-e/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/blues
-ky/cm/cmmi10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/t
-exmf-dist/fonts/type1/bluesky/cm/cmr8.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx
-73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmti8.pfb></nix/store
-/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesk
-y/cm/cmr10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/tex
-mf-dist/fonts/type1/bluesky/cm/cmti10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx
-73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmcsc10.pfb>
-Output written on epos4.pdf (1 page, 46787 bytes).
+sky/latex/lasy10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/sha
+re/texmf-dist/fonts/type1/bluesky/cm/cmsy7.pfb></nix/store/6mg48a2z1r1vx1pcdng1
+a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb></nix
+/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/
+bluesky/cm/cmr5.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/shar
+e/texmf-dist/fonts/type1/bluesky/cm/cmmi10.pfb></nix/store/6mg48a2z1r1vx1pcdng1
+a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmr8.pfb></nix/s
+tore/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bl
+uesky/cm/cmti8.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share
+/texmf-dist/fonts/type1/bluesky/cm/cmr10.pfb></nix/store/6mg48a2z1r1vx1pcdng1a6
+cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bluesky/cm/cmti10.pfb></nix/s
+tore/6mg48a2z1r1vx1pcdng1a6cpx73bs6qf-tetex-3.0/share/texmf-dist/fonts/type1/bl
+uesky/cm/cmcsc10.pfb>
+Output written on epos4.pdf (1 page, 51296 bytes).

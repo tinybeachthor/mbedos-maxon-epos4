@@ -941,6 +941,8 @@
 \setboolean{shading}{true}
 \@x{}\moduleLeftDash\@xx{ {\MODULE} epos4}\moduleRightDash\@xx{}%
 \@pvspace{8.0pt}%
+\@x{ {\CONSTANT} UNKNOWN}%
+\@pvspace{8.0pt}%
 \@x{}%
 \@y{\@s{0}%
  \ensuremath{NMT} states
@@ -965,19 +967,20 @@
 \@pvspace{8.0pt}%
  \@x{ EPOS \.{\defeq} \{ EPOS\_NotReadyToSwitchOn ,\, EPOS\_SwitchOnDisabled
  ,\,}%
- \@x{\@s{8.2} EPOS\_ReadyToSwitchOn ,\, EPOS\_SwitchedOn ,\,
+ \@x{\@s{51.94} EPOS\_ReadyToSwitchOn ,\, EPOS\_SwitchedOn ,\,
  EPOS\_OperationEnabled ,\,}%
- \@x{\@s{8.2} EPOS\_QuickStopActive ,\, EPOS\_FaultReactionActive ,\,
+ \@x{\@s{51.94} EPOS\_QuickStopActive ,\, EPOS\_FaultReactionActive ,\,
  EPOS\_Fault \}}%
 \@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
 \@x{ {\VARIABLES} nmt\_state ,\, epos\_state}%
+\@x{ {\VARIABLES} nmt\_requested ,\, epos\_requested}%
 \@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
-\@x{ TypeOK \.{\defeq} \.{\land} nmt\_state \.{\in} NMT}%
-\@x{\@s{56.14} \.{\land} epos\_state \.{\in} EPOS}%
+\@x{ TypeOK \.{\defeq} \.{\land} nmt\_state \.{\in} ( NMT \.{\cup} UNKNOWN )}%
+\@x{\@s{56.14} \.{\land} epos\_state \.{\in} ( EPOS \.{\cup} UNKNOWN )}%
 \@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
@@ -985,12 +988,19 @@
 \@x{\@s{77.78} \.{\land} nmt\_state \.{'} \.{=} NMT\_PreOperational}%
 \@x{\@s{77.78} \.{\land} {\UNCHANGED} epos\_state}%
 \@pvspace{8.0pt}%
+\@x{ Go\_NMT\_Operational \.{=} \.{\land} nmt\_state \.{=}}%
+\@x{\@s{112.20} \.{\land} {\UNCHANGED} epos\_state}%
+\@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
 \@x{ Init\@s{4.12} \.{\defeq} \.{\land} nmt\_state \.{=} NMT\_Booting}%
 \@x{\@s{39.83} \.{\land} epos\_state \.{=} EPOS\_NotReadyToSwitchOn}%
 \@pvspace{8.0pt}%
 \@x{ Next \.{\defeq} \.{\lor} Recv\_BootUp}%
+\@pvspace{8.0pt}%
+\@x{ Live\@s{1.65} \.{\defeq} \.{\land} \A\, s \.{\in} NMT \.{:}}%
+ \@x{\@s{58.16} ( nmt\_requested \.{=} s ) \.{\leadsto} ( nmt\_state \.{=} s
+ )}%
 \@pvspace{8.0pt}%
 \@x{}\bottombar\@xx{}%
 \setboolean{shading}{false}
@@ -1000,7 +1010,7 @@
 \end{cpar}%
 \begin{cpar}{0}{F}{F}{0}{0}{}%
  \ensuremath{\.{\,\backslash\,}}* Last modified \ensuremath{Mon}
- \ensuremath{Jan} 13 13:34:17 \ensuremath{CET} 2020 by \ensuremath{martin
+ \ensuremath{Jan} 13 14:00:02 \ensuremath{CET} 2020 by \ensuremath{martin
 }%
 \end{cpar}%
 \begin{cpar}{0}{F}{F}{0}{0}{}%
