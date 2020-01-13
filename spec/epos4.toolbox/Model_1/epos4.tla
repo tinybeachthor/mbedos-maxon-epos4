@@ -24,8 +24,8 @@ TypeOK == /\ nmt_state \in NMT
 \* Received a BootUp message
 \******
 NMT_BootUp == /\ nmt_state = NMT_Booting
-              /\ nmt_state' = NMT_PreOperational
-              /\ UNCHANGED nmt_requested
+               /\ nmt_state' = NMT_PreOperational
+               /\ UNCHANGED nmt_requested
 
 \******
 \* State transmition confirmation
@@ -84,12 +84,12 @@ Next == \/ NMT_BootUp
 
 Live == \A s \in NMT :
            (nmt_requested = s) ~> (nmt_state = s)
-
+           
 -----
 
 Spec == Init /\ [][Next]_<<vars>> /\ WF_vars(Next)
 
 =============================================================================
 \* Modification History
-\* Last modified Mon Jan 13 20:42:49 CET 2020 by martin
+\* Last modified Mon Jan 13 19:05:23 CET 2020 by martin
 \* Created Mon Jan 13 12:39:13 CET 2020 by martin

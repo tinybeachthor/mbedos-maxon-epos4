@@ -941,66 +941,112 @@
 \setboolean{shading}{true}
 \@x{}\moduleLeftDash\@xx{ {\MODULE} epos4}\moduleRightDash\@xx{}%
 \@pvspace{8.0pt}%
-\@x{ {\CONSTANT} UNKNOWN}%
-\@pvspace{8.0pt}%
-\@x{}%
-\@y{\@s{0}%
- \ensuremath{NMT} states
-}%
-\@xx{}%
+\begin{lcom}{0}%
+\begin{cpar}{0}{F}{F}{0}{0}{}%
+Possible \ensuremath{NMT} states
+\end{cpar}%
+\end{lcom}%
  \@x{ {\CONSTANT} NMT\_Booting ,\, NMT\_PreOperational ,\, NMT\_Operational
  ,\, NMT\_Stopped}%
 \@pvspace{8.0pt}%
  \@x{ NMT \.{\defeq} \{ NMT\_Booting ,\, NMT\_PreOperational ,\,
  NMT\_Operational ,\, NMT\_Stopped \}}%
 \@pvspace{8.0pt}%
-\@x{}%
-\@y{\@s{0}%
- \ensuremath{EPOS} states
-}%
-\@xx{}%
- \@x{ {\CONSTANT} EPOS\_NotReadyToSwitchOn ,\, EPOS\_SwitchOnDisabled ,\,
- EPOS\_ReadyToSwitchOn ,\,}%
- \@x{\@s{16.4} EPOS\_SwitchedOn ,\, EPOS\_OperationEnabled ,\,
- EPOS\_QuickStopActive ,\,}%
-\@x{\@s{16.4} EPOS\_FaultReactionActive ,\, EPOS\_Fault}%
+\@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
- \@x{ EPOS \.{\defeq} \{ EPOS\_NotReadyToSwitchOn ,\, EPOS\_SwitchOnDisabled
- ,\,}%
- \@x{\@s{51.94} EPOS\_ReadyToSwitchOn ,\, EPOS\_SwitchedOn ,\,
- EPOS\_OperationEnabled ,\,}%
- \@x{\@s{51.94} EPOS\_QuickStopActive ,\, EPOS\_FaultReactionActive ,\,
- EPOS\_Fault \}}%
+\@x{ {\VARIABLES} nmt\_state ,\, nmt\_requested}%
+\@pvspace{8.0pt}%
+\@x{ vars \.{\defeq} {\langle} nmt\_state ,\, nmt\_requested {\rangle}}%
 \@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
-\@x{ {\VARIABLES} nmt\_state ,\, epos\_state}%
-\@x{ {\VARIABLES} nmt\_requested ,\, epos\_requested}%
+\@x{ TypeOK \.{\defeq} \.{\land} nmt\_state \.{\in} NMT}%
+\@x{\@s{56.14} \.{\land} nmt\_requested \.{\in} NMT}%
 \@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
-\@x{ TypeOK \.{\defeq} \.{\land} nmt\_state \.{\in} ( NMT \.{\cup} UNKNOWN )}%
-\@x{\@s{56.14} \.{\land} epos\_state \.{\in} ( EPOS \.{\cup} UNKNOWN )}%
+\begin{lcom}{0}%
+\begin{cpar}{0}{F}{F}{0}{0}{}%
+Received a \ensuremath{BootUp} message
+\end{cpar}%
+\end{lcom}%
+\@x{ NMT\_BootUp \.{\defeq} \.{\land} nmt\_state \.{=} NMT\_Booting}%
+\@x{\@s{81.52} \.{\land} nmt\_state \.{'} \.{=} NMT\_PreOperational}%
+\@x{\@s{81.52} \.{\land} {\UNCHANGED} nmt\_requested}%
 \@pvspace{8.0pt}%
-\@x{}\midbar\@xx{}%
+\begin{lcom}{0}%
+\begin{cpar}{0}{F}{F}{0}{0}{}%
+State transmition confirmation
+\end{cpar}%
+\end{lcom}%
+ \@x{ NMT\_Transition\_Confirmed \.{\defeq} \.{\land} nmt\_state \.{\neq}
+ nmt\_requested}%
+\@x{\@s{144.78} \.{\land} nmt\_state \.{'} \.{=} nmt\_requested}%
+\@x{\@s{144.78} \.{\land} {\UNCHANGED} nmt\_requested}%
 \@pvspace{8.0pt}%
-\@x{ Recv\_BootUp \.{\defeq} \.{\land} nmt\_state \.{=} NMT\_Booting}%
-\@x{\@s{77.78} \.{\land} nmt\_state \.{'} \.{=} NMT\_PreOperational}%
-\@x{\@s{77.78} \.{\land} {\UNCHANGED} epos\_state}%
+\begin{lcom}{0}%
+\begin{cpar}{0}{F}{F}{0}{0}{}%
+Request state transitions
+\end{cpar}%
+\end{lcom}%
+ \@x{ NMT\_EnterPreOperational \.{\defeq} \.{\land} \.{\lor} nmt\_state \.{=}
+ NMT\_Operational}%
+\@x{\@s{150.52} \.{\lor} nmt\_state \.{=} NMT\_Stopped}%
+\@x{\@s{139.41} \.{\land} nmt\_requested \.{=} nmt\_state}%
+\@x{\@s{139.41} \.{\land} nmt\_requested \.{'} \.{=} NMT\_PreOperational}%
+\@x{\@s{139.41} \.{\land} {\UNCHANGED} nmt\_state}%
 \@pvspace{8.0pt}%
-\@x{ Go\_NMT\_Operational \.{=} \.{\land} nmt\_state \.{=}}%
-\@x{\@s{112.20} \.{\land} {\UNCHANGED} epos\_state}%
+ \@x{ NMT\_ResetCommunication \.{\defeq} \.{\land} \.{\lor} nmt\_state \.{=}
+ NMT\_Operational}%
+\@x{\@s{152.54} \.{\lor} nmt\_state \.{=} NMT\_PreOperational}%
+\@x{\@s{152.54} \.{\lor} nmt\_state \.{=} NMT\_Stopped}%
+\@x{\@s{141.43} \.{\land} nmt\_requested \.{=} nmt\_state}%
+\@x{\@s{141.43} \.{\land} nmt\_requested \.{'} \.{=} NMT\_Booting}%
+\@x{\@s{141.43} \.{\land} {\UNCHANGED} nmt\_state}%
+\@pvspace{8.0pt}%
+ \@x{ NMT\_ResetNode \.{\defeq} \.{\land} \.{\lor} nmt\_state \.{=}
+ NMT\_Operational}%
+\@x{\@s{105.27} \.{\lor} nmt\_state \.{=} NMT\_PreOperational}%
+\@x{\@s{105.27} \.{\lor} nmt\_state \.{=} NMT\_Stopped}%
+\@x{\@s{94.16} \.{\land} nmt\_requested \.{=} nmt\_state}%
+\@x{\@s{94.16} \.{\land} nmt\_requested \.{'} \.{=} NMT\_Booting}%
+\@x{\@s{94.16} \.{\land} {\UNCHANGED} nmt\_state}%
+\@pvspace{8.0pt}%
+ \@x{ NMT\_StartRemoteNode \.{\defeq} \.{\land} \.{\lor} nmt\_state \.{=}
+ NMT\_PreOperational}%
+\@x{\@s{136.06} \.{\lor} nmt\_state \.{=} NMT\_Stopped}%
+\@x{\@s{124.95} \.{\land} nmt\_requested \.{=} nmt\_state}%
+\@x{\@s{124.95} \.{\land} nmt\_requested \.{'} \.{=} NMT\_Operational}%
+\@x{\@s{124.95} \.{\land} {\UNCHANGED} nmt\_state}%
+\@pvspace{8.0pt}%
+ \@x{ NMT\_StopRemoteNode \.{\defeq} \.{\land} \.{\lor} nmt\_state \.{=}
+ NMT\_Operational}%
+\@x{\@s{133.64} \.{\lor} nmt\_state \.{=} NMT\_PreOperational}%
+\@x{\@s{122.53} \.{\land} nmt\_requested \.{=} nmt\_state}%
+\@x{\@s{122.53} \.{\land} nmt\_requested \.{'} \.{=} NMT\_Stopped}%
+\@x{\@s{122.53} \.{\land} {\UNCHANGED} nmt\_state}%
 \@pvspace{8.0pt}%
 \@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
 \@x{ Init\@s{4.12} \.{\defeq} \.{\land} nmt\_state \.{=} NMT\_Booting}%
-\@x{\@s{39.83} \.{\land} epos\_state \.{=} EPOS\_NotReadyToSwitchOn}%
+\@x{\@s{39.83} \.{\land} nmt\_requested \.{=} NMT\_PreOperational}%
 \@pvspace{8.0pt}%
-\@x{ Next \.{\defeq} \.{\lor} Recv\_BootUp}%
+\@x{ Next \.{\defeq} \.{\lor} NMT\_BootUp}%
+\@x{\@s{39.83} \.{\lor} NMT\_Transition\_Confirmed}%
+\@x{\@s{39.83} \.{\lor} \.{\lor} NMT\_EnterPreOperational}%
+\@x{\@s{50.94} \.{\lor} NMT\_ResetCommunication}%
+\@x{\@s{50.94} \.{\lor} NMT\_ResetNode}%
+\@x{\@s{50.94} \.{\lor} NMT\_StartRemoteNode}%
+\@x{\@s{50.94} \.{\lor} NMT\_StopRemoteNode}%
 \@pvspace{8.0pt}%
-\@x{ Live\@s{1.65} \.{\defeq} \.{\land} \A\, s \.{\in} NMT \.{:}}%
- \@x{\@s{58.16} ( nmt\_requested \.{=} s ) \.{\leadsto} ( nmt\_state \.{=} s
+\@x{ Live\@s{1.65} \.{\defeq} \A\, s \.{\in} NMT \.{:}}%
+ \@x{\@s{47.05} ( nmt\_requested \.{=} s ) \.{\leadsto} ( nmt\_state \.{=} s
  )}%
+\@pvspace{8.0pt}%
+\@x{}\midbar\@xx{}%
+\@pvspace{8.0pt}%
+ \@x{ Spec \.{\defeq} Init \.{\land} {\Box} [ Next ]_{ {\langle} vars
+ {\rangle}} \.{\land} {\WF}_{ vars} ( Next )}%
 \@pvspace{8.0pt}%
 \@x{}\bottombar\@xx{}%
 \setboolean{shading}{false}
@@ -1010,7 +1056,7 @@
 \end{cpar}%
 \begin{cpar}{0}{F}{F}{0}{0}{}%
  \ensuremath{\.{\,\backslash\,}}* Last modified \ensuremath{Mon}
- \ensuremath{Jan} 13 14:00:02 \ensuremath{CET} 2020 by \ensuremath{martin
+ \ensuremath{Jan} 13 20:42:49 \ensuremath{CET} 2020 by \ensuremath{martin
 }%
 \end{cpar}%
 \begin{cpar}{0}{F}{F}{0}{0}{}%
