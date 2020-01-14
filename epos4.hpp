@@ -130,7 +130,7 @@ private:
 
   Mutex epos_access;
   ConditionVariable* epos_cond;
-  epos_state epos_current_state = EPOS_Unknown;
+  epos_state epos_current_state;
 
   void block_for_epos_state (epos_state desired) {
     pc.printf("Waiting for EPOS state : %d\n", desired);
@@ -169,7 +169,7 @@ private:
 
   */
   enum nmt_state : uint8_t {
-    BootUp = 0x00,
+    Booting = 0x00,
     Operational = 0x05,
     PreOperational = 0x7F,
     Stopped = 0x04,
@@ -179,7 +179,7 @@ private:
 
   Mutex nmt_access;
   ConditionVariable* nmt_cond;
-  nmt_state nmt_current_state = NMT_Unknown;
+  nmt_state nmt_current_state;
 
   void block_for_nmt_state(nmt_state desired_state) {
     nmt_access.lock();
@@ -191,7 +191,7 @@ private:
 
   nmt_state to_nmt_state (uint8_t state) {
     switch (state) {
-      case BootUp: return BootUp;
+      case Booting: return Booting;
       case PreOperational: return PreOperational;
       case Operational: return Operational;
       case Stopped: return Stopped;

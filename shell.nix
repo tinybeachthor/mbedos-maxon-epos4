@@ -20,5 +20,8 @@ mkShell {
     mbed-cli
     stlink
     can-utils
+
+    tlaplusToolbox
+    tetex
   ];
 }

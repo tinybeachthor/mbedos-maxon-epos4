@@ -11,6 +11,8 @@ CANMessage constructCANMessage (const uint8_t* raw, const uint8_t NODE_ID) {
 }
 
 Epos4::Epos4 (PinName rx, PinName tx)
+  : epos_current_state(EPOS_Unknown)
+  , nmt_current_state(NMT_Unknown)
 {
   nmt_cond = new ConditionVariable(nmt_access);
   epos_cond = new ConditionVariable(epos_access);
