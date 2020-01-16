@@ -21,6 +21,20 @@ Epos4::Epos4 (PinName rx, PinName tx)
 
   can_listener.start(callback(this, &Epos4::can_handler_routine));
 
+  block_for_any_nmt_state();
+  pc.printf("Go a nmt state\n");
+
+  nmt_access.lock();
+  Epos4::nmt_state state = nmt_current_state;
+  nmt_access.unlock();
+
+  pc.printf("State during pcb startup is : 0x%X\n", state);
+
+  if (state == Operational || state == Stopped) {
+    steering_can::put(nmt_messages::construct(nmt_messages::transition::ResetNode));
+    ThisThread::sleep_for(50);
+  }
+
   // Wait for first HEARTBEAT message to arrive
   block_for_nmt_state(nmt_state::PreOperational);
   pc.printf("Got to NMT PreOperational\n");

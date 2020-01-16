@@ -189,6 +189,14 @@ private:
     nmt_access.unlock();
   }
 
+  void block_for_any_nmt_state() {
+    nmt_access.lock();
+    while (nmt_current_state == NMT_Unknown) {
+      nmt_cond->wait();
+    }
+    nmt_access.unlock();
+  }
+
   nmt_state to_nmt_state (uint8_t state) {
     switch (state) {
       case Booting: return Booting;
