@@ -73,6 +73,12 @@ void Epos4::startPosMode () {
   block_for_epos_state(OperationEnabled);
 }
 
+void Epos4::setHomePosition() {
+  block_for_epos_state(OperationEnabled);
+  steering_can::put(epos4_messages::constructHomePos(NODE_ID));
+  ThisThread::sleep_for(50);
+}
+
 void Epos4::moveToAngle (float angle) {
   block_for_epos_state(OperationEnabled);
 

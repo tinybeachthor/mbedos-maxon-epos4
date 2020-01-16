@@ -104,6 +104,18 @@ namespace epos4_messages {
     return msg;
   }
 
+  inline CANMessage constructHomePos(const uint8_t NODE_ID) {
+    const uint8_t msgTemplate[8] = {0x23, 0xB0, 0x30, 0x00, 0x40, 0x06, 0x00, 0x00};
+
+    CANMessage msg;
+    msg.format = CANStandard;
+    msg.id = 0x600 + NODE_ID;
+    memcpy(msg.data, &msgTemplate, 8);
+    msg.len = 8;
+
+    return msg;
+  }
+
   enum ErrorCodes : uint32_t {
     NO_ABORT                          = 0x00000000, // Communication successful
     TOGGLE_ERROR                      = 0x05030000, // Toggle bit not alternated

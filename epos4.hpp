@@ -22,6 +22,7 @@ public:
 
   void startPosMode ();
   void moveToAngle (float angle);
+  void setHomePosition();
   void stop ();
 
 
