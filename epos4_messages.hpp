@@ -71,6 +71,7 @@ namespace epos4_messages {
     QuickStop                  = 0b00000010, // 0xxx x01x
     DisableOperation           = 0b00000111, // 0xxx 0111
     EnableOperation            = 0b00001111, // 0xxx 1111
+    // bit 6 determines relative/absolute mode (1 is relative)
     ConfirmSetpoint            = 0b00111111, //
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
