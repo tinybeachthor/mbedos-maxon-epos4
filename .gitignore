@@ -2,4 +2,8 @@
 
 BUILD/
 
-*SnapShot*
+spec/**/*SnapShot*
+spec/**/*.log
+spec/**/*.tex
+spec/**/*.aux
+spec/*.toolbox/**/*.pdf
