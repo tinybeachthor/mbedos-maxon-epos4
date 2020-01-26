@@ -22,6 +22,7 @@ public:
 
   void startPosMode ();
   void moveToAngle (float angle);
+  void setHomePosition();
   void stop ();
 
 
@@ -184,6 +185,14 @@ private:
   void block_for_nmt_state(nmt_state desired_state) {
     nmt_access.lock();
     while (nmt_current_state != desired_state) {
+      nmt_cond->wait();
+    }
+    nmt_access.unlock();
+  }
+
+  void block_for_any_nmt_state() {
+    nmt_access.lock();
+    while (nmt_current_state == NMT_Unknown) {
       nmt_cond->wait();
     }
     nmt_access.unlock();

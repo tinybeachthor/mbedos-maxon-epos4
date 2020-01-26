@@ -71,6 +71,7 @@ namespace epos4_messages {
     QuickStop                  = 0b00000010, // 0xxx x01x
     DisableOperation           = 0b00000111, // 0xxx 0111
     EnableOperation            = 0b00001111, // 0xxx 1111
+    // bit 6 determines relative/absolute mode (1 is relative)
     ConfirmSetpoint            = 0b00111111, //
     FaultReset                 = 0b11111111, // 0xxx xxxx -> 1xxx xxxx
   };
@@ -93,6 +94,18 @@ namespace epos4_messages {
   inline CANMessage constructTargetPos(float angle, const uint8_t NODE_ID) {
     uint8_t numerator = (int) (angle * 100);
     const uint8_t msgTemplate[8] = {0x23, 0x7A, 0x60, 0x00, 0xE8, 0x03, 0x00, 0x00};
+
+    CANMessage msg;
+    msg.format = CANStandard;
+    msg.id = 0x600 + NODE_ID;
+    memcpy(msg.data, &msgTemplate, 8);
+    msg.len = 8;
+
+    return msg;
+  }
+
+  inline CANMessage constructHomePos(const uint8_t NODE_ID) {
+    const uint8_t msgTemplate[8] = {0x23, 0xB0, 0x30, 0x00, 0x40, 0x06, 0x00, 0x00};
 
     CANMessage msg;
     msg.format = CANStandard;

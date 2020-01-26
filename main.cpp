@@ -28,6 +28,7 @@ int main() {
   wait_us(1000 * 1000);
   pc.printf("Motorcontroller on\n");
 
+  mc.setHomePosition();
   pc.printf("Steering to position\n");
   mc.moveToAngle(2.5f);
   wait_us(1000 * 1000);
